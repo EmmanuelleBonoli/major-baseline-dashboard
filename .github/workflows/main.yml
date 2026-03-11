@@ -20,6 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # ── Java / Maven ──────────────────────────────────────────────
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -34,35 +35,52 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven
 
+      # ── Node / npm ─────────────────────────────────────────────────
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Cache npm dependencies
+      - name: Cache root npm dependencies
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('front-end/package-lock.json') }}
+          key: ${{ runner.os }}-node-root-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-node-root-
 
-      - name: Install Frontend Dependencies
+      - name: Cache frontend npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-front-${{ hashFiles('front-end/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-front-
+
+      # Installe Prettier + prettier-plugin-java (racine)
+      - name: Install root dependencies (Prettier + plugins)
+        run: npm ci
+
+      # Installe les dépendances du frontend (Vue, Vite, etc.)
+      - name: Install frontend dependencies
         working-directory: ./front-end
         run: npm ci
 
+      # ── Backend checks ─────────────────────────────────────────────
       - name: Run Checkstyle (Backend)
         working-directory: ./back-end
         run: mvn checkstyle:check
 
-      - name: Run Unit Tests (Backend)
+      - name: Run unit tests (Backend)
         working-directory: ./back-end
         run: mvn test -Punit-tests
 
-      - name: Run Prettier/Lint Check (Frontend)
-        working-directory: ./front-end
-        run: npx prettier --check "src/**/*.{js,vue,ts,css}"
+      # ── Frontend checks ────────────────────────────────────────────
+      # On lance Prettier depuis la RACINE pour qu'il trouve prettier-plugin-java
+      # Le .prettierrc et .prettierignore sont à la racine
+      - name: Run Prettier check (Frontend)
+        run: npx prettier --check "front-end/src/**/*.{js,vue,ts,css}"
 
-      - name: Run Build Check (Frontend)
+      - name: Run build check (Frontend)
         working-directory: ./front-end
         run: npm run build
