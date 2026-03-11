@@ -11,5 +11,5 @@ export const aetherProtocol: ShowcaseApp = {
   description: `
 Eclipse explore le rythme, la lumière et le silence
 dans une expérience mobile minimaliste.
-  `,
+  `
 }

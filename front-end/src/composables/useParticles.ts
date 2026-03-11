@@ -53,7 +53,7 @@ export function useParticles() {
       styleElement.parentNode.removeChild(styleElement)
     }
     // Supprimer les particules du DOM
-    particles.forEach(p => {
+    particles.forEach((p) => {
       if (p.parentNode) {
         p.parentNode.removeChild(p)
       }

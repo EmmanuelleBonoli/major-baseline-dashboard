@@ -21,5 +21,4 @@ const layout = computed(() => {
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

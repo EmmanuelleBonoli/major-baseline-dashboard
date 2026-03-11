@@ -1,37 +1,49 @@
 <template>
-  <div class="min-h-screen text-white flex flex-col items-center justify-center p-4 md:p-8 bg-deep-blue relative overflow-hidden">
+  <div
+    class="min-h-screen text-white flex flex-col items-center justify-center p-4 md:p-8 bg-deep-blue relative overflow-hidden"
+  >
     <!-- Background Decoration -->
     <div class="bg-gradient-decoration fixed top-0 left-0 w-full h-full z-0"></div>
     <div class="bg-grid-decoration fixed top-0 left-0 w-full h-full z-0 opacity-30"></div>
 
     <!-- Header -->
     <div class="absolute top-0 w-full left-0 p-4 md:p-8 z-20">
-      <router-link to="/" class="btn-back inline-flex items-center gap-2 text-teal uppercase tracking-[1px] md:tracking-[3px] font-bold py-2 md:py-3 px-4 md:px-6 text-sm md:text-base border-2 border-teal bg-black/40 transition-all duration-300">
+      <router-link
+        to="/"
+        class="btn-back inline-flex items-center gap-2 text-teal uppercase tracking-[1px] md:tracking-[3px] font-bold py-2 md:py-3 px-4 md:px-6 text-sm md:text-base border-2 border-teal bg-black/40 transition-all duration-300"
+      >
         &lt; Retour au site
       </router-link>
     </div>
 
     <!-- Form Container -->
-    <div class="form-card w-full max-w-[700px] bg-black/80 border border-teal/30 p-8 md:p-14 backdrop-blur-md relative mt-16 md:mt-0 z-10">
-      
+    <div
+      class="form-card w-full max-w-[700px] bg-black/80 border border-teal/30 p-8 md:p-14 backdrop-blur-md relative mt-16 md:mt-0 z-10"
+    >
       <div class="mb-8 md:mb-12 border-b border-teal/20 pb-6">
-        <h1 class="form-title text-[2.5rem] md:text-[4rem] font-black uppercase text-white tracking-[2px] md:tracking-[4px] leading-tight m-0">Contact</h1>
-        <p class="text-gold tracking-[1px] md:tracking-[2px] uppercase text-[0.8rem] md:text-[1rem] mt-2 font-bold">/// Initialiser la transmission ///</p>
+        <h1
+          class="form-title text-[2.5rem] md:text-[4rem] font-black uppercase text-white tracking-[2px] md:tracking-[4px] leading-tight m-0"
+        >
+          Contact
+        </h1>
+        <p class="text-gold tracking-[1px] md:tracking-[2px] uppercase text-[0.8rem] md:text-[1rem] mt-2 font-bold">
+          /// Initialiser la transmission ///
+        </p>
       </div>
 
       <form @submit.prevent="handleSubmit" class="flex flex-col gap-6 md:gap-8">
-        <AppInput 
-          v-model="email" 
-          type="email" 
+        <AppInput
+          v-model="email"
+          type="email"
           label="Adresse Email"
           placeholder="votre@email.com"
           required
           animated-dot
         />
 
-        <AppInput 
-          v-model="subject" 
-          type="text" 
+        <AppInput
+          v-model="subject"
+          type="text"
           label="Intitulé du message"
           placeholder="Objet de votre demande..."
           required
@@ -39,10 +51,10 @@
           animation-delay="0.25s"
         />
 
-        <AppInput 
-          v-model="body" 
+        <AppInput
+          v-model="body"
           textarea
-          rows="6" 
+          rows="6"
           label="Corps de transmission"
           placeholder="Entrez vos coordonnées et décrivez votre projet ici..."
           required
@@ -51,12 +63,7 @@
         />
 
         <div class="w-full flex justify-end mt-4">
-          <AppButton 
-            type="submit" 
-            variant="primary"
-            :loading="isLoading"
-            class="btn-submit px-8 py-4"
-          >
+          <AppButton type="submit" variant="primary" :loading="isLoading" class="btn-submit px-8 py-4">
             <span>{{ isLoading ? 'Envoi en cours...' : 'Envoyer la requête' }}</span>
             <span class="text-xl" v-if="!isLoading">🚀</span>
           </AppButton>
@@ -93,7 +100,7 @@ const handleSubmit = async () => {
     subject.value = ''
     body.value = ''
   } catch (error) {
-    toast.error(error, 'Une erreur est survenue lors de l\'envoi de votre message. Veuillez réessayer plus tard.')
+    toast.error(error, "Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer plus tard.")
   } finally {
     isLoading.value = false
   }
@@ -106,13 +113,13 @@ const handleSubmit = async () => {
 }
 
 .bg-gradient-decoration {
-  background-image: 
+  background-image:
     radial-gradient(ellipse at top right, color-mix(in srgb, var(--color-teal) 15%, transparent) 0%, transparent 50%),
     radial-gradient(ellipse at bottom left, color-mix(in srgb, var(--color-gold) 10%, transparent) 0%, transparent 50%);
 }
 
 .bg-grid-decoration {
-  background-image: 
+  background-image:
     linear-gradient(color-mix(in srgb, var(--color-teal) 10%, transparent) 1px, transparent 1px),
     linear-gradient(90deg, color-mix(in srgb, var(--color-teal) 10%, transparent) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -150,7 +157,11 @@ const handleSubmit = async () => {
 }
 
 @keyframes gridScroll {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(50px); }
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(50px);
+  }
 }
 </style>

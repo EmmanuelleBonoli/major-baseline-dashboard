@@ -1,8 +1,8 @@
 <template>
   <div class="fixed top-4 right-4 z-[9999] flex flex-col gap-2">
     <TransitionGroup name="toast">
-      <div 
-        v-for="toast in toasts" 
+      <div
+        v-for="toast in toasts"
         :key="toast.id"
         class="px-5 py-4 rounded shadow-lg flex items-center gap-3 text-white border min-w-[300px] font-bold tracking-wide"
         :class="{
@@ -17,7 +17,12 @@
           <template v-if="toast.type === 'error'">✕</template>
         </span>
         <span class="flex-1 font-light">{{ toast.message }}</span>
-        <button @click="removeToast(toast.id)" class="opacity-75 hover:opacity-100 transition-opacity text-xl font-bold">&times;</button>
+        <button
+          @click="removeToast(toast.id)"
+          class="opacity-75 hover:opacity-100 transition-opacity text-xl font-bold"
+        >
+          &times;
+        </button>
       </div>
     </TransitionGroup>
   </div>

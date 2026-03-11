@@ -24,9 +24,7 @@
         <div class="stat-content">
           <h3>Total Téléchargements</h3>
           <div class="value">{{ formatNumber(globalStats.totalDownloads) }}</div>
-          <div class="trend positive">
-            <span>+12.5%</span> <small>vs période précédente</small>
-          </div>
+          <div class="trend positive"><span>+12.5%</span> <small>vs période précédente</small></div>
         </div>
       </div>
 
@@ -37,9 +35,7 @@
         <div class="stat-content">
           <h3>Utilisateurs Actifs</h3>
           <div class="value">{{ formatNumber(globalStats.activeUsers) }}</div>
-          <div class="trend positive">
-            <span>+5.2%</span> <small>vs période précédente</small>
-          </div>
+          <div class="trend positive"><span>+5.2%</span> <small>vs période précédente</small></div>
         </div>
       </div>
 
@@ -50,9 +46,7 @@
         <div class="stat-content">
           <h3>Revenus Totaux</h3>
           <div class="value">{{ formatCurrency(globalStats.totalRevenue) }}</div>
-          <div class="trend negative">
-            <span>-2.1%</span> <small>vs période précédente</small>
-          </div>
+          <div class="trend negative"><span>-2.1%</span> <small>vs période précédente</small></div>
         </div>
       </div>
     </div>
@@ -61,12 +55,7 @@
     <div class="chart-section glass-panel">
       <h3>Activités Cumulées (Tous les jeux)</h3>
       <div class="chart-container">
-        <ChartComponent 
-          v-if="!loading" 
-          :chart-data="globalChartData" 
-          color="#646cff"
-          :height="300"
-        />
+        <ChartComponent v-if="!loading" :chart-data="globalChartData" color="#646cff" :height="300" />
       </div>
     </div>
 
@@ -89,7 +78,7 @@ const selectedPeriod = ref('30d')
 const globalStats = ref({
   totalDownloads: 125430,
   activeUsers: 45200,
-  totalRevenue: 3450.50
+  totalRevenue: 3450.5
 })
 
 const globalChartData = ref<ChartData>({
@@ -100,13 +89,12 @@ const globalChartData = ref<ChartData>({
 onMounted(async () => {
   try {
     const { chartData, latestActiveUsers } = await dashboardService.getFormattedGlobalStats(MetricType.ACTIVE_USERS, 30)
-    
+
     globalChartData.value = chartData
     globalStats.value.activeUsers = latestActiveUsers
-    
+
     // const downloads = await dashboardService.getFormattedGlobalStats(MetricType.DOWNLOADS, 30)
     // const revenue = await dashboardService.getFormattedGlobalStats(MetricType.REVENUE, 30)
-
   } catch (error) {
     toast.error(error, 'Erreur lors du chargement des statistiques globales')
   } finally {
@@ -115,7 +103,8 @@ onMounted(async () => {
 })
 
 const formatNumber = (num: number) => new Intl.NumberFormat('fr-FR').format(num)
-const formatCurrency = (amount: number) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount)
+const formatCurrency = (amount: number) =>
+  new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount)
 </script>
 
 <style scoped>
@@ -155,13 +144,24 @@ const formatCurrency = (amount: number) => new Intl.NumberFormat('fr-FR', { styl
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 1.5rem;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 /* Stats Cards */
-.gradient-blue { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.2) 100%); border-color: rgba(59, 130, 246, 0.3); }
-.gradient-purple { background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.2) 100%); border-color: rgba(139, 92, 246, 0.3); }
-.gradient-green { background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.2) 100%); border-color: rgba(16, 185, 129, 0.3); }
+.gradient-blue {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.2) 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+.gradient-purple {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.2) 100%);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+.gradient-green {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.2) 100%);
+  border-color: rgba(16, 185, 129, 0.3);
+}
 
 .stat-card {
   display: flex;
@@ -201,9 +201,15 @@ const formatCurrency = (amount: number) => new Intl.NumberFormat('fr-FR', { styl
   gap: 0.5rem;
 }
 
-.trend.positive { color: #4ade80; }
-.trend.negative { color: #f87171; }
-.trend small { color: rgba(255, 255, 255, 0.5); }
+.trend.positive {
+  color: #4ade80;
+}
+.trend.negative {
+  color: #f87171;
+}
+.trend small {
+  color: rgba(255, 255, 255, 0.5);
+}
 
 /* Chart Section */
 .chart-section h3 {
@@ -364,7 +370,9 @@ const formatCurrency = (amount: number) => new Intl.NumberFormat('fr-FR', { styl
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .btn-sm {
@@ -372,5 +380,7 @@ const formatCurrency = (amount: number) => new Intl.NumberFormat('fr-FR', { styl
   font-size: 0.85rem;
 }
 
-.mt-2 { margin-top: 1rem; }
+.mt-2 {
+  margin-top: 1rem;
+}
 </style>

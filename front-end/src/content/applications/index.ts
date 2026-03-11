@@ -1,4 +1,4 @@
 import { financeApp } from './financeApp'
 
 export const applications = [financeApp]
-export const applicationsMap = Object.fromEntries(applications.map(a => [a.id, a]))
+export const applicationsMap = Object.fromEntries(applications.map((a) => [a.id, a]))

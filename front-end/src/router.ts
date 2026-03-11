@@ -57,11 +57,11 @@ const router = createRouter({
     }
   ],
   scrollBehavior(to, from, savedPosition) {
-    void from;
+    void from
     if (to.hash) {
       return {
         el: to.hash,
-        behavior: 'smooth',
+        behavior: 'smooth'
       }
     }
     return savedPosition || { top: 0 }
@@ -69,10 +69,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  void from;
+  void from
   const isAuthenticated = !!localStorage.getItem('majorBaselineToken')
 
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!isAuthenticated) {
       next({ name: 'login' })
     } else {

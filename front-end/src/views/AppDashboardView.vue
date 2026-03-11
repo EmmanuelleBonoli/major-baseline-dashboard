@@ -10,7 +10,7 @@
           <p class="subtitle">Dashboard Global - {{ application.studio || 'Studio Indépendant' }}</p>
         </div>
       </div>
-      
+
       <div class="actions">
         <select v-model="selectedPeriod" class="period-select">
           <option value="7d">7 derniers jours</option>
@@ -51,7 +51,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="stat-card glass-panel gradient-purple">
         <div class="stat-icon">
           <component :is="Users" :size="32" class="text-purple-500" />
@@ -60,7 +60,7 @@
           <h3>Utilisateurs Actifs</h3>
           <div class="value">{{ formatNumber(aggregatedStats.activeUsers) }}</div>
           <div class="trend positive">
-             <span>+{{ mockTrend() }}%</span> <small>vs période précédente</small>
+            <span>+{{ mockTrend() }}%</span> <small>vs période précédente</small>
           </div>
         </div>
       </div>
@@ -70,8 +70,8 @@
     <div class="platforms-section glass-panel">
       <h3>Versions par Plateforme</h3>
       <div class="platforms-grid">
-        <div 
-          v-for="app in application.stores" 
+        <div
+          v-for="app in application.stores"
           :key="app.id"
           class="platform-card"
           :class="app.platform === 'ANDROID' ? 'android-card' : 'ios-card'"
@@ -89,7 +89,7 @@
               <span class="label">DLs: </span>
               <span class="val">{{ formatNumber(dashboardService.getMockAppStats(app.id).downloads) }}</span>
             </div>
-             <div>
+            <div>
               <span class="label">Rev: </span>
               <span class="val">{{ formatCurrency(dashboardService.getMockAppStats(app.id).revenue) }}</span>
             </div>
@@ -99,12 +99,8 @@
       </div>
     </div>
   </div>
-  <div v-else-if="loading" class="loading">
-    Chargement...
-  </div>
-  <div v-else class="error">
-    Jeu non trouvé
-  </div>
+  <div v-else-if="loading" class="loading">Chargement...</div>
+  <div v-else class="error">Jeu non trouvé</div>
 </template>
 
 <script setup lang="ts">
@@ -127,7 +123,7 @@ const fetchGame = async () => {
   try {
     application.value = await dashboardService.getGameById(applicationId)
   } catch (e) {
-    toast.error(e, 'Erreur lors du chargement de l\'application')
+    toast.error(e, "Erreur lors du chargement de l'application")
   } finally {
     loading.value = false
   }
@@ -144,7 +140,8 @@ const aggregatedStats = computed(() => {
 const mockTrend = () => (Math.random() * 10).toFixed(1)
 
 const formatNumber = (num: number) => new Intl.NumberFormat('fr-FR').format(num)
-const formatCurrency = (amount: number) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount)
+const formatCurrency = (amount: number) =>
+  new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount)
 
 const syncData = () => alert('Sync launched')
 
@@ -184,7 +181,7 @@ const goToAppDashboard = (appId: string) => {
   justify-content: center;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .title-section h2 {
@@ -228,9 +225,18 @@ const goToAppDashboard = (appId: string) => {
   padding: 1.5rem;
 }
 
-.gradient-blue { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.2) 100%); border-color: rgba(59, 130, 246, 0.3); }
-.gradient-purple { background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.2) 100%); border-color: rgba(139, 92, 246, 0.3); }
-.gradient-green { background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.2) 100%); border-color: rgba(16, 185, 129, 0.3); }
+.gradient-blue {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.2) 100%);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+.gradient-purple {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.2) 100%);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+.gradient-green {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.2) 100%);
+  border-color: rgba(16, 185, 129, 0.3);
+}
 
 .stat-card {
   display: flex;
@@ -265,7 +271,9 @@ const goToAppDashboard = (appId: string) => {
   font-size: 0.85rem;
   color: #4ade80;
 }
-.trend small { color: rgba(255, 255, 255, 0.5); }
+.trend small {
+  color: rgba(255, 255, 255, 0.5);
+}
 
 /* Platforms Section */
 .platforms-section h3 {
@@ -298,12 +306,18 @@ const goToAppDashboard = (appId: string) => {
 .platform-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0;
-  width: 4px; height: 100%;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
 }
 
-.android-card::before { background: #3ddc84; }
-.ios-card::before { background: #fff; }
+.android-card::before {
+  background: #3ddc84;
+}
+.ios-card::before {
+  background: #fff;
+}
 
 .platform-header {
   display: flex;
@@ -343,7 +357,9 @@ const goToAppDashboard = (appId: string) => {
   right: 1.5rem;
   font-size: 1.2rem;
   opacity: 0.5;
-  transition: opacity 0.2s, transform 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
 }
 
 .platform-card:hover .arrow {

@@ -1,6 +1,9 @@
 <template>
   <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center relative">
-    <router-link to="/" class="btn-return absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 no-underline font-medium tracking-[1px] uppercase text-[0.9rem] bg-black/40 px-4 py-2 rounded-lg border border-white/10 text-white/60">
+    <router-link
+      to="/"
+      class="btn-return absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 no-underline font-medium tracking-[1px] uppercase text-[0.9rem] bg-black/40 px-4 py-2 rounded-lg border border-white/10 text-white/60"
+    >
       <span class="text-xl leading-none -mt-1">←</span> Retour au site
     </router-link>
     <div class="login-card bg-teal/5 backdrop-blur-md border border-teal/20 rounded-2xl p-12 w-full max-w-[400px]">
@@ -8,40 +11,64 @@
       <p class="text-center text-white/60 mb-8">Accéder au dashboard</p>
 
       <form @submit.prevent="handleLogin" class="flex flex-col gap-6">
-        <AppInput 
-          id="email" 
-          type="email" 
+        <AppInput
+          id="email"
+          type="email"
           label="Email"
-          v-model="email" 
+          v-model="email"
           placeholder="votre@email.com"
           required
           autocomplete="email"
           class="!bg-black/20 !border-white/10 !rounded-lg !py-3 !px-4"
         />
 
-        <AppInput 
-          id="password" 
-          :type="isPasswordVisible ? 'text' : 'password'" 
+        <AppInput
+          id="password"
+          :type="isPasswordVisible ? 'text' : 'password'"
           label="Mot de passe"
-          v-model="password" 
+          v-model="password"
           placeholder="••••••••"
           required
           autocomplete="current-password"
           class="!bg-black/20 !border-white/10 !rounded-lg !py-3 !pl-4 !pr-13"
         >
           <template #suffix>
-            <button 
-              type="button" 
+            <button
+              type="button"
               @click="togglePasswordVisibility"
               class="absolute right-3 top-[38px] text-white/50 hover:text-white focus:outline-none transition-colors flex items-center justify-center w-8 h-8"
               aria-label="Afficher ou masquer le mot de passe"
             >
-              <svg v-if="!isPasswordVisible" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg
+                v-if="!isPasswordVisible"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
-              <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+              <svg
+                v-else
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                ></path>
                 <line x1="1" y1="1" x2="23" y2="23"></line>
               </svg>
             </button>
@@ -99,7 +126,6 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-
 .btn-return {
   transition: all 0.3s ease;
 }
