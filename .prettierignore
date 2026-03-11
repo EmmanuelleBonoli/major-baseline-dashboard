@@ -1,0 +1,38 @@
+# ========================
+# Global Prettier Ignore
+# ========================
+
+# Root config files
+package-lock.json
+*.md
+
+# Docker / CI
+docker-compose.yml
+
+# ========================
+# Back-end ignore
+# ========================
+back-end/target/**
+back-end/.mvn/**
+back-end/mvnw
+back-end/mvnw.cmd
+back-end/pom.xml
+back-end/src/main/resources/**
+back-end/src/test/**
+back-end/.idea/**
+back-end/Dockerfile
+
+# ========================
+# Front-end ignore
+# ========================
+front-end/node_modules/**
+front-end/dist/**
+front-end/.vite/**
+
+# ========================
+# CI / Husky
+# ========================
+.github/**
+.husky/**
+.husky-scripts/**
+node_modules/**

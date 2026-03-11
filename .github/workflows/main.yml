@@ -1,0 +1,68 @@
+name: CI/CD Pipeline for Fullstack Game Studio
+
+on:
+  push:
+    branches-ignore:
+      - development
+      - staging
+      - main
+
+  pull_request:
+    branches:
+      - development
+      - staging
+      - main
+
+jobs:
+  lint-and-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '23'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('front-end/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install Frontend Dependencies
+        working-directory: ./front-end
+        run: npm ci
+
+      - name: Run Checkstyle (Backend)
+        working-directory: ./back-end
+        run: mvn checkstyle:check
+
+      - name: Run Unit Tests (Backend)
+        working-directory: ./back-end
+        run: mvn test -Punit-tests
+
+      - name: Run Prettier/Lint Check (Frontend)
+        working-directory: ./front-end
+        run: npx prettier --check "src/**/*.{js,vue,ts,css}"
+
+      - name: Run Build Check (Frontend)
+        working-directory: ./front-end
+        run: npm run build

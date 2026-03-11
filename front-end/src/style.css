@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+    --color-night: #0B1A21;
+    --color-deep-blue: #0a1a2e;
+    --color-black: #000000;
+    --color-teal: #1a8b9d;
+    --color-gold: #d4af37;
+    --color-gold-soft: #F2C94C;
+    --color-slate-custom: #94a3b8;
+    --font-family-sans: 'Inter', system-ui, sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
+
+    --shadow-glow-teal: 0 0 15px color-mix(in srgb, var(--color-teal) 30%, transparent);
+    --shadow-glow-teal-lg: 0 0 30px color-mix(in srgb, var(--color-teal) 40%, transparent);
+    --shadow-glow-gold: 0 0 15px color-mix(in srgb, var(--color-gold) 30%, transparent);
+    --shadow-glow-gold-lg: 0 0 30px color-mix(in srgb, var(--color-gold) 40%, transparent);
+}
+
+@layer base {
+    :root {
+        font-family: var(--font-family-sans);
+        line-height: 1.5;
+        font-weight: 400;
+        color-scheme: dark;
+        color: rgba(255, 255, 255, 0.87);
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Rajdhani', 'Orbitron', var(--font-family-sans);
+        background: radial-gradient(circle at top right, #2b3044, #1b1e2b);
+        background-color: #000000;
+        color: #ffffff;
+        overflow-x: hidden;
+        min-height: 100vh;
+        background-attachment: fixed;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-family: var(--font-display);
+        letter-spacing: -0.025em;
+    }
+
+    a {
+        font-weight: 500;
+        color: var(--color-gold);
+        text-decoration: inherit;
+        text-underline-offset: 4px;
+    }
+}
+
+@layer components {}

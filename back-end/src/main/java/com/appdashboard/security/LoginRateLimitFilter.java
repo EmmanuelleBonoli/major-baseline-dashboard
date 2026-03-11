@@ -1,0 +1,76 @@
+package com.appdashboard.security;
+
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+import io.github.bucket4j.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.time.Duration;
+
+@Component
+public class LoginRateLimitFilter extends OncePerRequestFilter {
+
+  private final Integer SIXTY = 60;
+  private final Integer TEN_THOUSAND = 10_000;
+  private final Integer FIVE = 5;
+  private final Integer FIFTEEN = 15;
+  private final Long ONE_BILLION = 1_000_000_000L;
+  private final Integer FOUR_HUNDRED_AND_TWENTY_NINE = 429;
+
+  // cache buckets par-key (IP)
+  private final LoadingCache<String, Bucket> cache = Caffeine.newBuilder()
+      .expireAfterAccess(Duration.ofMinutes(SIXTY))
+      .maximumSize(TEN_THOUSAND)
+      .build(this::newBucket);
+
+  private Bucket newBucket(String key) {
+    // 5 tentatives toutes les 15 minutes (burst=5)
+    return Bucket.builder().addLimit(limit -> limit.capacity(FIVE).refillGreedy(1, Duration.ofMinutes(FIFTEEN)))
+        .build();
+  }
+
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    if (!"/auth/login".equalsIgnoreCase(request.getRequestURI())) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
+    String key = extractKey(request); // remote IP
+    Bucket bucket = cache.get(key);
+    ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+
+    if (probe.isConsumed()) {
+      response.setHeader("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
+      filterChain.doFilter(request, response);
+    } else {
+      // trop de tentatives
+      long waitForSecs = probe.getNanosToWaitForRefill() / ONE_BILLION;
+      response.setStatus(FOUR_HUNDRED_AND_TWENTY_NINE);
+      response.setHeader("Retry-After", String.valueOf(waitForSecs));
+      response.getWriter().write("Too many login attempts. Try later.");
+    }
+  }
+
+  public long getRemainingAttempt(String key) {
+    return cache.get(key).getAvailableTokens();
+  }
+
+  public void resetBucket(String key) {
+    cache.put(key, newBucket(key));
+  }
+
+  private String extractKey(HttpServletRequest request) {
+    String ip = request.getHeader("X-Forwarded-For");
+    if (ip == null)
+      ip = request.getRemoteAddr();
+    return "ip:" + ip;
+  }
+}

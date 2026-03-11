@@ -1,0 +1,35 @@
+# Backend
+back-end/target/
+*.class
+*.log
+*.jar
+*.war
+*.ear
+
+# Frontend
+front-end/node_modules/
+front-end/dist/
+front-end/.vite/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Root Node (Husky/Prettier)
+node_modules/
