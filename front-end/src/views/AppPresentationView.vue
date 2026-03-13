@@ -1,6 +1,5 @@
 <template>
   <div class="w-full text-white min-h-screen flex flex-col">
-
     <div class="bg-gradient-background fixed top-0 left-0 w-full h-full z-[-1]"></div>
     <div class="bg-grid-pattern fixed top-0 left-0 w-full h-full z-[-1]"></div>
 

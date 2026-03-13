@@ -5,9 +5,13 @@
     <HeaderSection />
     <div class="w-full shrink-0 h-20 md:h-28 lg:h-32"></div>
     <div class="form-wrapper z-10">
-      <div class="form-card w-full max-w-[700px] bg-black/80 border border-teal/30 p-8 md:p-14 backdrop-blur-md relative">
+      <div
+        class="form-card w-full max-w-[700px] bg-black/80 border border-teal/30 p-8 md:p-14 backdrop-blur-md relative"
+      >
         <div class="mb-6 md:mb-10 border-b border-teal/20 pb-5">
-          <h1 class="form-title text-[2.5rem] md:text-[4rem] font-black uppercase text-white tracking-[2px] md:tracking-[4px] leading-tight m-0">
+          <h1
+            class="form-title text-[2.5rem] md:text-[4rem] font-black uppercase text-white tracking-[2px] md:tracking-[4px] leading-tight m-0"
+          >
             Contact
           </h1>
           <p class="text-gold tracking-[1px] md:tracking-[2px] uppercase text-[0.8rem] md:text-[1rem] mt-2 font-bold">
@@ -98,7 +102,7 @@ const validateField = (field: 'email' | 'subject' | 'body') => {
       if (!email.value.trim()) {
         errors.email = "L'adresse email est requise."
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-        errors.email = "Veuillez saisir une adresse email valide."
+        errors.email = 'Veuillez saisir une adresse email valide.'
       } else {
         errors.email = ''
       }
@@ -114,9 +118,9 @@ const validateField = (field: 'email' | 'subject' | 'body') => {
       break
     case 'body':
       if (!body.value.trim()) {
-        errors.body = "Le corps du message est requis."
+        errors.body = 'Le corps du message est requis.'
       } else if (body.value.trim().length < 10) {
-        errors.body = "Le message doit contenir au moins 10 caractères."
+        errors.body = 'Le message doit contenir au moins 10 caractères.'
       } else {
         errors.body = ''
       }
@@ -224,7 +228,11 @@ const handleSubmit = async () => {
 }
 
 @keyframes gridScroll {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(50px); }
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(50px);
+  }
 }
 </style>

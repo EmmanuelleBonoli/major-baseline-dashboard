@@ -109,7 +109,9 @@ const inputId = computed(() => props.id)
 
 .error-fade-enter-active,
 .error-fade-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 .error-fade-enter-from,
 .error-fade-leave-to {

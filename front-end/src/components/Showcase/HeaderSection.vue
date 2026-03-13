@@ -129,5 +129,4 @@ const links = [
   box-shadow: 0 0 20px var(--color-teal);
   transform: translateY(-4px);
 }
-
 </style>
