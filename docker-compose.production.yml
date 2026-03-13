@@ -1,0 +1,26 @@
+services:
+  mysql:
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_PROD}
+      MYSQL_DATABASE: ${DB_NAME_PROD}
+      MYSQL_USER: ${DB_USER_PROD}
+      MYSQL_PASSWORD: ${DB_PASSWORD_PROD}
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${DB_PASSWORD_PROD}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+      DB_HOST_PROD: mysql
+      DB_PORT_PROD: 3306
+    ports:
+      - "8081:8080"
+
+  frontend:
+    ports:
+      - "8090:80"

@@ -1,8 +1,8 @@
 <template>
-  <section class="relative py-20 md:py-32 px-4 md:px-8 z-[2]" id="studio">
+  <section class="relative py-20 md:py-32 px-0 sm:px-4 md:px-8 z-[2]" id="studio">
     <div class="max-w-[1200px] mx-auto text-center">
       <h2
-        class="section-title text-[2.5rem] md:text-[4rem] mb-4 font-black tracking-[3px] md:tracking-[5px] uppercase text-white"
+        class="section-title text-[1.8rem] sm:text-[3.5rem] md:text-[5rem] mb-4 font-black tracking-[1px] sm:tracking-[3px] md:tracking-[5px] uppercase text-white leading-[1.1]"
       >
         Le Studio
       </h2>
@@ -11,7 +11,7 @@
       </p>
 
       <div
-        class="studio-card grid grid-cols-1 md:grid-cols-2 gap-12 text-left border border-teal/40 p-8 md:p-12 rounded-lg backdrop-blur-lg relative overflow-hidden group"
+        class="studio-card grid grid-cols-1 md:grid-cols-2 gap-12 text-left border-y sm:border border-teal/40 p-6 sm:p-8 md:p-12 backdrop-blur-lg relative overflow-hidden group"
       >
         <div
           class="ambient-glow-gold absolute top-0 right-0 w-32 h-32 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"
@@ -56,8 +56,11 @@
           <h3 class="text-white text-[1.5rem] md:text-[1.8rem] font-bold tracking-[2px] mb-2 uppercase text-center">
             Emmanuelle
           </h3>
-          <p class="text-gold uppercase tracking-[3px] text-sm md:text-md mb-6 font-bold">
-            Fondatrice & Développeuse Full Stack
+          <p class="text-gold uppercase tracking-[3px] text-sm md:text-md mb-6 font-bold flex flex-col items-center text-center md:block">
+            <span>Fondatrice</span>
+            <span class="md:before:content-['\00a0&\00a0'] md:inline-block hidden"></span>
+            <span class="md:hidden">&</span>
+            <span>Développeuse Full Stack</span>
           </p>
           <p class="text-slate-400 text-center text-[1rem] leading-relaxed px-4">
             Seule aux commandes, c'est l'envie d'explorer le code et de concevoir des projets variés qui donne vie à

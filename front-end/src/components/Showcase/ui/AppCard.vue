@@ -1,7 +1,7 @@
 <template>
   <router-link
     :to="`/project/${application.id}`"
-    class="app-card group cursor-pointer relative bg-black/60 border-2 border-teal overflow-hidden transition-all duration-500 flex flex-col"
+    class="app-card group cursor-pointer relative bg-black/60 border-y sm:border-2 border-teal overflow-hidden transition-all duration-500 flex flex-col"
   >
     <div
       class="card-header w-full h-[200px] md:h-[300px] flex items-center justify-center text-[4rem] md:text-[6rem] relative overflow-hidden shrink-0"
@@ -9,7 +9,7 @@
       <span class="card-icon relative z-[2]">{{ application.icon }}</span>
     </div>
 
-    <div class="p-6 md:p-10 bg-black/80 flex-1 flex flex-col">
+    <div class="p-6 sm:p-8 md:p-10 bg-black/80 flex-1 flex flex-col">
       <h3
         class="text-[1.5rem] md:text-[2rem] mb-3 md:mb-4 text-gold uppercase tracking-[2px] md:tracking-[3px] font-black leading-tight"
       >
