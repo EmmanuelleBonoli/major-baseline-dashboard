@@ -4,13 +4,13 @@
     <div class="bg-grid-decoration"></div>
     <HeaderSection />
     <div class="w-full shrink-0 h-20 md:h-28 lg:h-32"></div>
-    <div class="form-wrapper z-10">
+    <div class="form-wrapper z-10 px-0 sm:px-4">
       <div
-        class="form-card w-full max-w-[700px] bg-black/80 border border-teal/30 p-8 md:p-14 backdrop-blur-md relative"
+        class="form-card w-full max-w-[700px] bg-black/80 border-y sm:border border-teal/30 p-4 sm:p-8 md:p-14 backdrop-blur-md relative"
       >
         <div class="mb-6 md:mb-10 border-b border-teal/20 pb-5">
           <h1
-            class="form-title text-[2.5rem] md:text-[4rem] font-black uppercase text-white tracking-[2px] md:tracking-[4px] leading-tight m-0"
+            class="form-title text-[1.8rem] sm:text-[2.8rem] md:text-[3.5rem] font-black uppercase text-white tracking-[2px] md:tracking-[3px] leading-tight m-0"
           >
             Contact
           </h1>
@@ -193,23 +193,20 @@ const handleSubmit = async () => {
   position: relative;
   width: 100%;
   flex: 1;
-  padding: 4rem 1rem;
+  padding: 2rem 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+@media (min-width: 640px) {
+  .form-wrapper {
+    padding: 4rem 1rem;
+  }
+}
+
 .form-card {
   box-shadow: 0 0 40px color-mix(in srgb, var(--color-teal) 10%, transparent);
-}
-.form-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background-image: linear-gradient(to bottom, var(--color-teal), transparent);
 }
 
 .form-title {

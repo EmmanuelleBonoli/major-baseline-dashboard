@@ -5,20 +5,10 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky",
-    "prettier": "npx prettier --write ."
+    "prettier": "npx prettier --write .",
+    "docker:dev": "docker compose --env-file ./back-end/.env -f docker-compose.yml -f docker-compose.development.yml up",
+    "docker:dev:down": "docker compose --env-file ./back-end/.env -f docker-compose.yml -f docker-compose.development.yml down"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EmmanuelleBonoli/major-baseline-dashboard.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/EmmanuelleBonoli/major-baseline-dashboard/issues"
-  },
-  "homepage": "https://github.com/EmmanuelleBonoli/major-baseline-dashboard#readme",
   "devDependencies": {
     "husky": "^9.1.7",
     "prettier": "^3.8.1",

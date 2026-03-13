@@ -1,9 +1,10 @@
 <template>
   <header class="header-container fixed w-full top-0 z-[1000] bg-black/80 backdrop-blur-[20px] border-b border-teal/30">
-    <nav class="max-w-[1600px] mx-auto px-6 md:px-12 py-4 md:py-6 flex justify-between items-center">
+    <nav class="max-w-[1600px] mx-auto px-4 md:px-12 py-2 md:py-6 flex justify-between items-center">
       <router-link
         :to="{ path: '/', hash: '#home' }"
-        class="logo flex items-center h-12 md:h-16 lg:h-20 w-auto transition-all relative z-[1002] cursor-pointer"
+        class="logo flex items-center h-14 md:h-20 lg:h-22 w-auto transition-all relative z-[1002] cursor-pointer"
+        :style="isMenuOpen ? 'filter: grayscale(1) brightness(0.2); opacity: 0.5;' : ''"
         aria-label="Retour à l'accueil"
       >
         <img src="/major-baseline-logo-dark.svg" alt="Major Baseline Logo" class="h-full w-auto object-contain" />
@@ -20,28 +21,26 @@
       </button>
 
       <!-- Menu Desktop -->
-      <ul class="hidden md:flex gap-8 lg:gap-12 list-none items-center">
-        <li v-for="(link, index) in links" :key="index">
-          <router-link
-            :to="link.hash ? { path: link.path, hash: link.hash } : link.path"
-            class="nav-item text-white no-underline font-bold text-[1rem] lg:text-[1.1rem] tracking-[2px] uppercase relative px-2 lg:px-4 py-2 flex items-center group"
-          >
-            <span
-              class="absolute left-[-15px] opacity-0 text-gold transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-2"
-              >▶</span
+      <div class="hidden md:flex flex-1 items-center justify-end gap-x-6 lg:gap-x-12 ml-6 lg:ml-12 min-w-0">
+        <ul class="nav-list list-none m-0 p-0">
+          <li v-for="(link, index) in links" :key="index">
+            <router-link
+              :to="link.hash ? { path: link.path, hash: link.hash } : link.path"
+              class="nav-item text-white no-underline font-bold text-[0.9rem] lg:text-[1.1rem] tracking-[1.5px] lg:tracking-[2.5px] uppercase relative px-6 lg:px-8 py-2 flex items-center group whitespace-nowrap"
+              :class="{ 'active-link': isLinkActive(link) }"
             >
-            <span class="transition-transform duration-300 group-hover:translate-x-4">{{ link.label }}</span>
-          </router-link>
-        </li>
-        <li>
-          <router-link
-            :to="isAuthenticated ? '/dashboard' : '/login'"
-            class="btn-primary text-teal border-2 border-teal rounded py-2 px-6 no-underline font-bold text-[1rem] lg:text-[1.1rem] tracking-[2px] uppercase ml-4 inline-block"
-          >
-            {{ isAuthenticated ? 'DASHBOARD' : 'CONNEXION' }}
-          </router-link>
-        </li>
-      </ul>
+              <span class="indicator absolute left-0 opacity-0 text-gold transition-all duration-300 text-xs">▶</span>
+              <span class="label transition-transform duration-300">{{ link.label }}</span>
+            </router-link>
+          </li>
+        </ul>
+        <router-link
+          :to="isAuthenticated ? '/dashboard' : '/login'"
+          class="btn-primary text-teal border-2 border-teal rounded py-2.5 px-6 lg:px-8 no-underline font-bold text-[0.95rem] lg:text-[1.1rem] tracking-[2px] uppercase shrink-0 ml-4 h-fit"
+        >
+          {{ isAuthenticated ? 'DASHBOARD' : 'CONNEXION' }}
+        </router-link>
+      </div>
 
       <!-- Menu Mobile -->
       <div
@@ -73,16 +72,55 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const isMenuOpen = ref(false)
 const isAuthenticated = ref(false)
+const activeSection = ref('home')
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
+const isLinkActive = (link: any) => {
+  // Si pas sur la page d'accueil, on vérifie juste le chemin
+  if (route.path !== '/') {
+    return route.path === link.path
+  }
+
+  // Si sur la page d'accueil, on vérifie le chemin ET la section active (calculée par le scroll)
+  if (link.path === '/') {
+    const linkHash = link.hash?.replace('#', '') || 'home'
+    return activeSection.value === linkHash
+  }
+
+  return false
+}
+
 onMounted(() => {
   isAuthenticated.value = !!localStorage.getItem('majorBaselineToken')
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '-40% 0px -40% 0px', // Détecte la section quand elle est au milieu de l'écran
+    threshold: 0
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        activeSection.value = entry.target.id
+      }
+    })
+  }, observerOptions)
+
+  // On observe toutes les sections principales
+  const sections = ['home', 'projects', 'studio']
+  sections.forEach((id) => {
+    const el = document.getElementById(id)
+    if (el) observer.observe(el)
+  })
 })
 
 const links = [
@@ -105,12 +143,42 @@ const links = [
   opacity: 0.85;
 }
 
+.nav-list {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-items: end;
+  column-gap: 0.5rem;
+  row-gap: 0.25rem;
+}
+
+@media (min-width: 1200px) {
+  .nav-list {
+    display: flex;
+    flex-wrap: nowrap;
+    grid-template-columns: none;
+    gap: 0;
+  }
+}
+
 .nav-item {
   transition: all 0.3s ease;
 }
-.nav-item:hover {
+
+.nav-item:hover,
+.nav-item.active-link {
   color: var(--color-teal);
   text-shadow: 0 0 10px var(--color-teal);
+}
+
+.nav-item:hover .indicator,
+.nav-item.active-link .indicator {
+  opacity: 1;
+  transform: translateX(8px);
+}
+
+.nav-item:hover .label,
+.nav-item.active-link .label {
+  transform: translateX(12px);
 }
 
 .nav-item-mobile {
