@@ -88,19 +88,19 @@ const isLinkActive = (link: any) => {
   if (route.path !== '/') {
     return route.path === link.path
   }
-  
+
   // Si sur la page d'accueil, on vérifie le chemin ET la section active (calculée par le scroll)
   if (link.path === '/') {
     const linkHash = link.hash?.replace('#', '') || 'home'
     return activeSection.value === linkHash
   }
-  
+
   return false
 }
 
 onMounted(() => {
   isAuthenticated.value = !!localStorage.getItem('majorBaselineToken')
-  
+
   const observerOptions = {
     root: null,
     rootMargin: '-40% 0px -40% 0px', // Détecte la section quand elle est au milieu de l'écran

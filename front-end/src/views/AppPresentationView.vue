@@ -210,7 +210,6 @@ watchEffect(() => {
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
-
 @keyframes gridScroll {
   0% {
     transform: translateY(0);

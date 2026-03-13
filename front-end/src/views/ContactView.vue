@@ -209,7 +209,6 @@ const handleSubmit = async () => {
   box-shadow: 0 0 40px color-mix(in srgb, var(--color-teal) 10%, transparent);
 }
 
-
 .form-title {
   text-shadow: 0 0 15px color-mix(in srgb, var(--color-teal) 50%, transparent);
 }

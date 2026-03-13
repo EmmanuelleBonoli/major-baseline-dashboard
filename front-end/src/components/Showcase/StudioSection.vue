@@ -56,7 +56,9 @@
           <h3 class="text-white text-[1.5rem] md:text-[1.8rem] font-bold tracking-[2px] mb-2 uppercase text-center">
             Emmanuelle
           </h3>
-          <p class="text-gold uppercase tracking-[3px] text-sm md:text-md mb-6 font-bold flex flex-col items-center text-center md:block">
+          <p
+            class="text-gold uppercase tracking-[3px] text-sm md:text-md mb-6 font-bold flex flex-col items-center text-center md:block"
+          >
             <span>Fondatrice</span>
             <span class="md:before:content-['\00a0&\00a0'] md:inline-block hidden"></span>
             <span class="md:hidden">&</span>

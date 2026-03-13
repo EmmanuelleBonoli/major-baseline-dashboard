@@ -3,7 +3,9 @@
     id="contact"
     class="relative bg-black/90 py-10 md:py-16 px-4 md:px-8 text-center border-t-2 border-teal z-[2] mt-12 md:mt-20 overflow-hidden"
   >
-    <p class="text-slate-custom text-[0.8rem] md:text-[1.2rem] tracking-[1px] md:tracking-[2px] uppercase flex flex-col md:block items-center gap-1">
+    <p
+      class="text-slate-custom text-[0.8rem] md:text-[1.2rem] tracking-[1px] md:tracking-[2px] uppercase flex flex-col md:block items-center gap-1"
+    >
       <span>© 2026 Major Baseline</span>
       <span class="md:before:content-['\00a0-\00a0']">Tous droits réservés</span>
     </p>

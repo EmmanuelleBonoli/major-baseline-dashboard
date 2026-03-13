@@ -24,9 +24,7 @@
           :class="{ 'border-gold text-gold': isDropdownOpen }"
         >
           <span class="truncate mr-2">Filtre : {{ filterLabels[modelValue] }}</span>
-          <span class="transition-transform duration-300 shrink-0" :class="{ 'rotate-180': isDropdownOpen }">
-            ▼
-          </span>
+          <span class="transition-transform duration-300 shrink-0" :class="{ 'rotate-180': isDropdownOpen }"> ▼ </span>
         </button>
         <div
           v-if="isDropdownOpen"

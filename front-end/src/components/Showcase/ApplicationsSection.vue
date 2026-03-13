@@ -8,9 +8,7 @@
 
     <ProjectFilter v-model="filter" />
 
-    <div
-      class="max-w-[1600px] mx-auto grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-8 md:gap-12"
-    >
+    <div class="max-w-[1600px] mx-auto grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-8 md:gap-12">
       <!-- Mock behavior: if filtering by app, applications array might be empty. For now show applications if all or application is selected -->
       <AppCard v-for="application in filteredGames" :key="application.id" :application="application" />
 
