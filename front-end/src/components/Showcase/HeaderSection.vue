@@ -1,13 +1,13 @@
 <template>
   <header class="header-container fixed w-full top-0 z-[1000] bg-black/80 backdrop-blur-[20px] border-b border-teal/30">
     <nav class="max-w-[1600px] mx-auto px-6 md:px-12 py-4 md:py-6 flex justify-between items-center">
-      <a
-        href="#home"
+      <router-link
+        :to="{ path: '/', hash: '#home' }"
         class="logo flex items-center h-12 md:h-16 lg:h-20 w-auto transition-all relative z-[1002] cursor-pointer"
-        aria-label="Retour en haut"
+        aria-label="Retour à l'accueil"
       >
         <img src="/major-baseline-logo-dark.svg" alt="Major Baseline Logo" class="h-full w-auto object-contain" />
-      </a>
+      </router-link>
 
       <!-- Bouton Burger (Mobile) -->
       <button
@@ -99,7 +99,10 @@ const links = [
 }
 
 .logo {
-  animation: logoGlow 2s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+}
+.logo:hover {
+  opacity: 0.85;
 }
 
 .nav-item {
@@ -127,14 +130,4 @@ const links = [
   transform: translateY(-4px);
 }
 
-@keyframes logoGlow {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 2px var(--color-teal)) drop-shadow(0 0 5px var(--color-teal));
-  }
-  50% {
-    filter: drop-shadow(0 0 5px var(--color-teal)) drop-shadow(0 0 10px var(--color-teal))
-      drop-shadow(0 0 15px var(--color-gold));
-  }
-}
 </style>

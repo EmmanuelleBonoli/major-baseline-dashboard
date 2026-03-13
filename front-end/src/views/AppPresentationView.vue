@@ -1,10 +1,9 @@
 <template>
-  <div class="w-full text-white min-h-screen">
-    <!-- Background Elements -->
+  <div class="w-full text-white min-h-screen flex flex-col">
+
     <div class="bg-gradient-background fixed top-0 left-0 w-full h-full z-[-1]"></div>
     <div class="bg-grid-pattern fixed top-0 left-0 w-full h-full z-[-1]"></div>
 
-    <!-- Header Navigation (Simple back button) -->
     <div
       class="px-4 py-4 md:p-8 flex justify-between items-center max-w-[1600px] mx-auto absolute top-0 w-full left-1/2 -translate-x-1/2 z-10"
     >
@@ -16,12 +15,10 @@
       </router-link>
     </div>
 
-    <!-- Content -->
     <div
       v-if="application"
       class="max-w-[1200px] mx-auto px-4 sm:px-8 pt-20 pb-16 md:py-32 relative z-[2] flex flex-col items-center"
     >
-      <!-- Application Icon / Banner Area -->
       <div
         class="banner-container relative w-full h-[200px] md:h-[400px] border-[1px] md:border-2 border-teal/50 overflow-hidden mb-8 md:mb-16 flex items-center justify-center"
       >
@@ -30,7 +27,6 @@
         </div>
       </div>
 
-      <!-- Title & Tags -->
       <div
         class="w-full mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-6 border-b border-teal/30 pb-8 md:pb-12"
       >
@@ -67,7 +63,6 @@
         </div>
       </div>
 
-      <!-- Categories Component -->
       <div class="w-full flex gap-3 md:gap-4 mb-8 md:mb-12 flex-wrap">
         <span
           v-for="category in application.category"
@@ -78,7 +73,6 @@
         </span>
       </div>
 
-      <!-- Description Section -->
       <div
         class="description-card w-full p-6 md:p-10 bg-black/60 border border-slate-700/50 backdrop-blur-md mb-10 md:mb-16 relative"
       >
@@ -96,7 +90,6 @@
       </div>
     </div>
 
-    <!-- 404 Case -->
     <div v-else class="min-h-[80vh] flex flex-col items-center justify-center relative z-[2] px-4 text-center">
       <div class="text-[8rem] md:text-[10rem] text-teal/20 font-black leading-none">404</div>
       <p class="text-[1.2rem] md:text-[2rem] text-gold uppercase tracking-widest mt-0 md:mt-[-1rem]">
@@ -108,6 +101,8 @@
         >Retour au site</router-link
       >
     </div>
+
+    <FooterSection />
   </div>
 </template>
 
@@ -117,6 +112,7 @@ import { useRoute } from 'vue-router'
 import { gamesMap } from '@/content/games/index'
 import { applicationsMap } from '@/content/applications/index'
 import { useParticles } from '@/composables/useParticles'
+import FooterSection from '@/components/Showcase/FooterSection.vue'
 
 useParticles()
 
