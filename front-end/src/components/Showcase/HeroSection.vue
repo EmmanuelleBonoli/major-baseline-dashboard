@@ -1,17 +1,18 @@
 <template>
-  <section class="relative mt-0 min-h-screen flex items-center justify-center z-[2]" id="home">
+  <section class="relative mt-0 min-h-screen flex items-center justify-center z-[2] pt-32 md:pt-0" id="home">
     <div class="hero-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 rounded-full"></div>
-    <div class="max-w-[1400px] p-8 text-center z-[3] relative">
+    <div class="max-w-[1400px] p-4 sm:p-8 text-center z-[3] relative">
       <h1
         data-text="MAJOR BASELINE"
-        class="glitch-text text-[2.5rem] sm:text-[3.5rem] md:text-[5.5rem] mb-4 font-black tracking-[3px] md:tracking-[5px] text-white uppercase relative leading-tight"
+        class="glitch-text text-[1.8rem] sm:text-[3.5rem] md:text-[5rem] mb-4 font-black tracking-[1px] sm:tracking-[3px] md:tracking-[5px] text-white uppercase relative leading-[1.1]"
       >
         MAJOR BASELINE
       </h1>
       <p
-        class="hero-subtitle text-[1.2rem] md:text-[1.8rem] text-teal mb-8 md:mb-12 tracking-[2px] md:tracking-[3px] uppercase font-bold"
+        class="hero-subtitle text-[0.9rem] sm:text-[1.2rem] md:text-[1.8rem] text-teal mb-8 md:mb-12 tracking-[1px] sm:tracking-[2px] md:tracking-[3px] uppercase font-bold text-center flex flex-col md:block items-center"
       >
-        /// Développement d'applications & jeux ///
+        <span>/// Développement d'applications</span>
+        <span class="md:before:content-['\00a0']">& jeux ///</span>
       </p>
       <div
         class="flex flex-row flex-wrap gap-4 sm:gap-8 justify-center mt-8 md:mt-12 w-full max-w-[500px] sm:max-w-full mx-auto"

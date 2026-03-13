@@ -16,22 +16,22 @@
 
     <div
       v-if="application"
-      class="max-w-[1200px] mx-auto px-4 sm:px-8 pt-20 pb-16 md:py-32 relative z-[2] flex flex-col items-center"
+      class="max-w-[1200px] mx-auto px-0 sm:px-8 pt-24 pb-16 md:py-32 relative z-[2] flex flex-col items-center"
     >
       <div
-        class="banner-container relative w-full h-[200px] md:h-[400px] border-[1px] md:border-2 border-teal/50 overflow-hidden mb-8 md:mb-16 flex items-center justify-center"
+        class="banner-container relative w-full h-[200px] md:h-[400px] border-y sm:border-x md:border-2 border-teal/50 overflow-hidden mb-8 md:mb-16 flex items-center justify-center"
       >
-        <div class="banner-icon text-[6rem] md:text-[12rem] z-10">
+        <div class="banner-icon text-[5rem] sm:text-[6rem] md:text-[12rem] z-10">
           {{ application.icon }}
         </div>
       </div>
 
       <div
-        class="w-full mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-6 border-b border-teal/30 pb-8 md:pb-12"
+        class="w-full mb-8 md:mb-12 px-4 sm:px-0 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-6 border-b border-teal/30 pb-8 md:pb-12"
       >
         <div class="w-full">
           <h1
-            class="title-glow text-[2rem] sm:text-[3rem] md:text-[4.5rem] font-black tracking-[2px] md:tracking-[4px] uppercase text-white mb-2 md:mb-4 leading-tight"
+            class="title-glow text-[1.8rem] sm:text-[3.5rem] md:text-[5.5rem] font-black tracking-[1px] sm:tracking-[3px] md:tracking-[5px] uppercase text-white mb-2 md:mb-4 leading-[1.1]"
           >
             {{ application.title }}
           </h1>
@@ -62,7 +62,7 @@
         </div>
       </div>
 
-      <div class="w-full flex gap-3 md:gap-4 mb-8 md:mb-12 flex-wrap">
+      <div class="w-full px-4 sm:px-0 flex gap-3 md:gap-4 mb-8 md:mb-12 flex-wrap">
         <span
           v-for="category in application.category"
           :key="category"
@@ -73,12 +73,12 @@
       </div>
 
       <div
-        class="description-card w-full p-6 md:p-10 bg-black/60 border border-slate-700/50 backdrop-blur-md mb-10 md:mb-16 relative"
+        class="description-card w-full p-6 sm:p-8 md:p-10 bg-black/60 border-y sm:border-x border-teal/30 backdrop-blur-md mb-10 md:mb-16 relative"
       >
         <h2
-          class="text-xl md:text-2xl font-bold tracking-[2px] md:tracking-[3px] text-teal uppercase mb-4 md:mb-6 flex items-center gap-4"
+          class="text-lg md:text-2xl font-bold tracking-[1px] md:tracking-[3px] text-teal uppercase mb-4 md:mb-6 flex items-center gap-4"
         >
-          <span class="w-6 md:w-8 h-[2px] bg-teal"></span> Détails du Projet
+          <span class="w-4 md:w-8 h-[2px] bg-teal shrink-0"></span> Détails du Projet
           <span class="w-full h-[1px] bg-gradient-to-r from-teal/20 to-transparent flex-1"></span>
         </h2>
         <div
@@ -208,16 +208,6 @@ watchEffect(() => {
 
 .category-tag {
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-}
-
-.description-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background-image: linear-gradient(to bottom, var(--color-teal), transparent);
 }
 
 @keyframes gridScroll {

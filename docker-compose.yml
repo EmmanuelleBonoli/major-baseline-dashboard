@@ -1,52 +1,35 @@
-version: '3.8'
-
 services:
-  # MySQL Database
   mysql:
     image: mysql:8.0
-    container_name: appstats-db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: appstats
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: appuser
-    ports:
-      - "3306:3306"
+    container_name: major-baseline-db
+    restart: unless-stopped
+    env_file:
+      - ./back-end/.env
     volumes:
       - mysql-data:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password
     networks:
       - app-network
 
-  # Backend Spring Boot
   backend:
     build:
-      context: ./backend
+      context: ./back-end
       dockerfile: Dockerfile
-    container_name: appstats-backend
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/appstats?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: appuser
-      SPRING_DATASOURCE_PASSWORD: appuser
-      GOOGLE_SERVICE_ACCOUNT_JSON: ${GOOGLE_SERVICE_ACCOUNT_JSON}
-      APPLE_KEY_ID: ${APPLE_KEY_ID}
-      APPLE_ISSUER_ID: ${APPLE_ISSUER_ID}
-      APPLE_PRIVATE_KEY: ${APPLE_PRIVATE_KEY}
-    ports:
-      - "8080:8080"
+    container_name: major-baseline-backend
+    restart: unless-stopped
+    env_file:
+      - ./back-end/.env
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - app-network
 
-  # Frontend Vue.js
   frontend:
     build:
-      context: ./frontend
+      context: ./front-end
       dockerfile: Dockerfile
-    container_name: appstats-frontend
-    ports:
-      - "3000:80"
+    container_name: major-baseline-frontend
+    restart: unless-stopped
     depends_on:
       - backend
     networks:
