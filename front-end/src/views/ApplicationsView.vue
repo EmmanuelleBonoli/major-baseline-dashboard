@@ -1,21 +1,29 @@
 <template>
   <div class="stores-view dashboard-layout">
     <!-- Header Section -->
-    <div class="header-section">
-      <div class="title-with-actions">
-        <h2>Dashboard Global</h2>
-        <div class="actions flex items-center gap-4">
-          <button class="btn-primary flex items-center gap-2" @click="showAddAppModal = true">
-            <component :is="Plus" :size="18" />
-            <span>Nouveau Projet</span>
-          </button>
-          <button class="btn-ghost flex items-center gap-2" @click="handleSyncAll" :disabled="isSyncing">
-            <component :is="RefreshCw" :size="18" :class="{ 'animate-spin': isSyncing }" />
-            <span>Actualiser</span>
-          </button>
-          <div class="date-filter">
-            <AppSelect v-model="selectedPeriod" :options="periodOptions" />
-          </div>
+    <div class="header-section flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
+      <div class="application-info flex items-center gap-4 md:gap-6">
+        <div
+          class="application-icon shrink-0 text-3xl md:text-4xl bg-white/5 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-2xl shadow-lg border border-white/10"
+        >
+          🌍
+        </div>
+        <div class="title-section min-w-0">
+          <h2 class="text-xl md:text-3xl font-bold truncate">Dashboard Global</h2>
+        </div>
+      </div>
+
+      <div class="actions flex flex-wrap items-center gap-3 md:gap-4">
+        <button class="btn-primary flex items-center gap-2" @click="showAddAppModal = true">
+          <component :is="Plus" :size="18" />
+          <span>Nouveau Projet</span>
+        </button>
+        <button class="btn-ghost flex items-center gap-2" @click="handleSyncAll" :disabled="isSyncing">
+          <component :is="RefreshCw" :size="18" :class="{ 'animate-spin': isSyncing }" />
+          <span>Actualiser</span>
+        </button>
+        <div class="date-filter">
+          <AppSelect v-model="selectedPeriod" :options="periodOptions" />
         </div>
       </div>
     </div>

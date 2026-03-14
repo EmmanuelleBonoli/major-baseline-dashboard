@@ -20,8 +20,10 @@
         >
           <component :is="ArrowLeft" :size="20" />
         </button>
-        <div class="application-icon shrink-0">
-          <component :is="Gamepad2" :size="32" class="text-white md:w-10 md:h-10" />
+        <div
+          class="application-icon shrink-0 text-3xl md:text-4xl bg-white/5 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-2xl shadow-lg border border-white/10"
+        >
+          {{ application.icon || '🎮' }}
         </div>
         <div class="title-section min-w-0 flex items-center gap-3">
           <h2 class="text-xl md:text-3xl font-bold truncate">
@@ -146,8 +148,11 @@
         <div
           v-for="app in application.stores"
           :key="app.id"
-          class="platform-card"
-          :class="[app.platform === 'ANDROID' ? 'android-card' : 'ios-card', { 'is-inactive': app.active === false }]"
+          :class="[
+            'platform-card',
+            app.platform === 'ANDROID' ? 'android-card' : 'ios-card',
+            { 'is-inactive': application.active === false || app.active === false }
+          ]"
         >
           <div v-if="app.active !== false" class="delete-store-btn" @click.stop="handleDeleteStore(app.id)">
             <component :is="X" :size="16" />
@@ -168,7 +173,7 @@
                     <span>{{ getStoreSummary(app.id).averageRating.toFixed(1) }}</span>
                   </div>
                 </div>
-                <span v-if="app.active === false" class="inactive-badge">Inactif</span>
+                <span v-if="application.active === false || app.active === false" class="inactive-badge">Inactif</span>
               </div>
             </div>
             <p class="package-name truncate">{{ app.packageName || app.bundleId }}</p>
@@ -259,7 +264,6 @@ import ChartComponent from '@/components/Dashboard/ChartComponent.vue'
 import type { Application } from '@/types'
 import { toast } from '@/composables/useToast'
 import {
-  Gamepad2,
   Download,
   CircleDollarSign,
   Users,

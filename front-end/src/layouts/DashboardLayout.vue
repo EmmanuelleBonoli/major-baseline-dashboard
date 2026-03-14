@@ -85,7 +85,9 @@
                 :class="{ 'bg-teal/10 text-teal border-teal/50': $route.path === `/application/${application.id}` }"
                 @click="navigateToGame(application.id)"
               >
-                <component :is="Gamepad2" :size="20" class="shrink-0 text-white/70" />
+                <div class="w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg shrink-0 text-lg">
+                  {{ application.icon || '🎮' }}
+                </div>
                 <span class="font-medium whitespace-nowrap overflow-hidden text-ellipsis">{{ application.name }}</span>
               </div>
               <div v-if="filteredGames.length === 0" class="text-white/30 text-sm text-center italic py-4">
@@ -119,7 +121,11 @@
                   class="flex items-center gap-3 p-2 rounded-lg text-white/30 cursor-pointer transition-all duration-200 hover:bg-white/5 hover:text-white/60"
                   @click="navigateToGame(app.id)"
                 >
-                  <component :is="Archive" :size="16" class="shrink-0" />
+                  <div
+                    class="w-6 h-6 flex items-center justify-center bg-white/5 rounded-md shrink-0 text-sm opacity-50"
+                  >
+                    {{ app.icon || '🎮' }}
+                  </div>
                   <span class="text-sm whitespace-nowrap overflow-hidden text-ellipsis">{{ app.name }}</span>
                 </div>
               </div>
@@ -152,16 +158,6 @@
     >
       <slot />
     </main>
-
-    <ConfirmModal
-      :show="showLogoutConfirm"
-      title="Déconnexion"
-      message="Voulez-vous vraiment vous déconnecter de votre session ?"
-      confirm-text="Se déconnecter"
-      is-dangerous
-      @confirm="executeLogout"
-      @cancel="showLogoutConfirm = false"
-    />
   </div>
 </template>
 
@@ -170,24 +166,24 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService } from '@/services/auth.service'
 import { useDashboardStore } from '@/stores/useDashboardStore'
-import ConfirmModal from '@/components/Dashboard/ui/ConfirmModal.vue'
-import { BarChart2, Menu, X, Home, ChevronDown, Gamepad2, Globe, LogOut, Archive } from 'lucide-vue-next'
+import { BarChart2, Menu, X, Home, ChevronDown, Globe, LogOut } from 'lucide-vue-next'
 
 const router = useRouter()
+
 const store = useDashboardStore()
+const applications = computed(() => store.applications)
 
 const isMobileMenuOpen = ref(false)
 const isProjectsExpanded = ref(true)
 const isArchivesExpanded = ref(false)
-const showLogoutConfirm = ref(false)
 const searchQuery = ref('')
 
 const activeApplications = computed(() => {
-  return store.applications.filter((app) => app.active !== false)
+  return applications.value.filter((app) => app.active !== false)
 })
 
 const archivedApplications = computed(() => {
-  return store.applications.filter((app) => app.active === false)
+  return applications.value.filter((app) => app.active === false)
 })
 
 const filteredGames = computed(() => {
@@ -202,10 +198,6 @@ const toggleMobileMenu = () => {
 }
 
 const logout = () => {
-  showLogoutConfirm.value = true
-}
-
-const executeLogout = () => {
   authService.logout()
   router.push('/login')
 }
