@@ -82,7 +82,9 @@
                 v-for="application in filteredGames"
                 :key="application.id"
                 class="flex items-center gap-3 p-3 rounded-lg text-white/70 cursor-pointer transition-all duration-200 border border-transparent hover:bg-teal/5 hover:text-teal hover:border-teal/20"
-                :class="{ 'bg-teal/10 text-teal border-teal/50': $route.path === `/application/${application.id}` }"
+                :class="{
+                  'bg-teal/10 text-teal border-teal/50': $route.path === `/dashboard/application/${application.id}`
+                }"
                 @click="navigateToGame(application.id)"
               >
                 <div class="w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg shrink-0 text-lg">
@@ -204,7 +206,7 @@ const logout = () => {
 
 const navigateToGame = (applicationId: string) => {
   isMobileMenuOpen.value = false
-  router.push(`/application/${applicationId}`)
+  router.push(`/dashboard/application/${applicationId}`)
 }
 
 onMounted(() => {

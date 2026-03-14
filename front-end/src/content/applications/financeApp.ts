@@ -11,5 +11,6 @@ export const financeApp: ShowcaseApp = {
 Un tableau de bord clair pour suivre vos dépenses, vos revenus,
 et planifier votre avenir sereinement. 
   `,
-  images: []
+  images: [],
+  techStack: ['Vue.js', 'Typescript', 'Spring Boot', 'PostgreSQL', 'Chart.js']
 }

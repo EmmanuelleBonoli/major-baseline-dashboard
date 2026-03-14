@@ -8,4 +8,5 @@ export interface ShowcaseApp {
   publishDate?: string // YYYY-MM-DD
   description?: string
   images?: string[] // screenshot / illustrations
+  techStack?: string[] // technologies used
 }

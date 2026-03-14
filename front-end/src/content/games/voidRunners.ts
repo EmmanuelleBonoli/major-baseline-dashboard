@@ -9,7 +9,8 @@ export const voidRunners: ShowcaseApp = {
   status: 'Sortie Q3 2026',
   publishDate: '2026-08-01',
   description: `
-Eclipse explore le rythme, la lumière et le silence
-dans une expérience mobile minimaliste.
-  `
+Course à haute vitesse dans le vide spatial.
+Défiez les lois de la physique.
+  `,
+  techStack: ['Flutter', 'Dart', 'WebAssembly', 'Supabase']
 }

@@ -16,7 +16,7 @@
         <button
           v-if="route.params.storeId"
           class="btn-ghost p-2"
-          @click="router.push(`/application/${application.id}`)"
+          @click="router.push(`/dashboard/application/${application.id}`)"
         >
           <component :is="ArrowLeft" :size="20" />
         </button>
@@ -374,7 +374,7 @@ const formatCurrency = (amount: number) => {
 
 const goToAppDashboard = (appId: string) => {
   if (application.value) {
-    router.push(`/application/${application.value.id}/store/${appId}`)
+    router.push(`/dashboard/application/${application.value.id}/store/${appId}`)
   }
 }
 

@@ -119,8 +119,6 @@
         <ChartComponent v-if="!loading" :chart-data="globalChartData" color="#646cff" :height="300" />
       </div>
     </div>
-
-    <!-- Applications List Section Removed as per user request -->
   </div>
 </template>
 
