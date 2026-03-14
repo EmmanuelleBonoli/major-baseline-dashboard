@@ -1,9 +1,9 @@
 package com.appdashboard.features.Dashboard;
 
-import com.appdashboard.features.Store.StoreDTO;
+import com.appdashboard.features.Application.Application;
 import com.appdashboard.features.Application.ApplicationDTO;
-import com.appdashboard.features.AppStats.StatsDTO;
-import com.appdashboard.features.AppStats.AppStats;
+import com.appdashboard.features.Store.Store;
+import com.appdashboard.features.Store.StoreDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +35,47 @@ public class DashboardController {
         return ResponseEntity.ok(applicationService.getAllGames());
     }
 
+    @PostMapping("/applications")
+    public ResponseEntity<ApplicationDTO> createApplication(@RequestBody Application application) {
+        return ResponseEntity.ok(applicationService.createApplication(application));
+    }
+
+    @DeleteMapping("/applications/{id}")
+    public ResponseEntity<Void> deleteApplication(@PathVariable UUID id) {
+        applicationService.deleteApplication(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/applications/{id}/restore")
+    public ResponseEntity<Void> restoreApplication(@PathVariable UUID id) {
+        applicationService.restoreApplication(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * GET /api/dashboard/applications/{id}/stats - Dashboard agrégé pour une application
+     */
+    @GetMapping("/applications/{id}/stats")
+    public ResponseEntity<AppDashboardDTO> getApplicationDashboard(
+            @PathVariable UUID id,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        if (startDate == null) {
+            startDate = LocalDate.now().minusDays(30);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now();
+        }
+
+        return ResponseEntity.ok(dashboardService.getApplicationDashboard(id, startDate, endDate));
+    }
+
+    @PostMapping("/sync-all")
+    public ResponseEntity<Void> syncAll() {
+        appStatsService.syncAllActiveStores();
+        return ResponseEntity.ok().build();
+    }
+
     /**
      * GET /api/dashboard/stores - Liste toutes les stores
      */
@@ -61,37 +102,37 @@ public class DashboardController {
         return ResponseEntity.ok(dashboardService.getAppDashboard(id, startDate, endDate));
     }
 
-    /**
-     * GET /api/dashboard/stores/{id}/stats - Statistiques par métrique
-     */
-    @GetMapping("/stores/{id}/stats")
-    public ResponseEntity<List<StatsDTO>> getStats(
-            @PathVariable UUID id,
-            @RequestParam AppStats.MetricType metricType,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return ResponseEntity.ok(
-                appStatsService.getStatsByMetric(id, metricType, startDate, endDate));
+
+
+
+    @PostMapping("/applications/{appId}/stores")
+    public ResponseEntity<StoreDTO> addStoreToApplication(@PathVariable UUID appId, @RequestBody Store store) {
+        com.appdashboard.features.Application.Application app = applicationService.getGameById(appId);
+        store.setApplication(app);
+        return ResponseEntity.ok(storeService.createStore(store));
     }
 
-    /**
-     * POST /api/dashboard/stores/{id}/sync - Synchroniser les données du store
-     */
-    @PostMapping("/stores/{id}/sync")
-    public ResponseEntity<Void> syncStoreData(@PathVariable UUID id) {
-        appStatsService.syncStoreData(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/stores/{id}")
+    public ResponseEntity<Void> deleteStore(@PathVariable UUID id) {
+        storeService.deleteStore(id);
+        return ResponseEntity.noContent().build();
     }
 
+
     /**
-     * GET /api/dashboard/global-stats - Statistiques globales agrégées
+     * GET /api/dashboard/global-summary - Dashboard global agrégé
      */
-    @GetMapping("/global-stats")
-    public ResponseEntity<List<StatsDTO>> getGlobalStats(
-            @RequestParam AppStats.MetricType metricType,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return ResponseEntity.ok(
-                appStatsService.getGlobalStats(metricType, startDate, endDate));
+    @GetMapping("/global-summary")
+    public ResponseEntity<AppDashboardDTO> getGlobalSummary(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        if (startDate == null) {
+            startDate = LocalDate.now().minusDays(30);
+        }
+        if (endDate == null) {
+            endDate = LocalDate.now();
+        }
+
+        return ResponseEntity.ok(dashboardService.getGlobalDashboard(startDate, endDate));
     }
 }

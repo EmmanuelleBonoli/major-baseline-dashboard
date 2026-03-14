@@ -4,27 +4,51 @@
     <div class="header-section">
       <div class="title-with-actions">
         <h2>Dashboard Global</h2>
-        <div class="date-filter">
-          <select v-model="selectedPeriod" class="period-select">
-            <option value="7d">7 derniers jours</option>
-            <option value="30d">30 derniers jours</option>
-            <option value="90d">3 mois</option>
-            <option value="1y">1 an</option>
-          </select>
+        <div class="actions flex items-center gap-4">
+          <button class="btn-primary flex items-center gap-2" @click="showAddAppModal = true">
+            <component :is="Plus" :size="18" />
+            <span>Nouveau Projet</span>
+          </button>
+          <button class="btn-ghost flex items-center gap-2" @click="handleSyncAll" :disabled="isSyncing">
+            <component :is="RefreshCw" :size="18" :class="{ 'animate-spin': isSyncing }" />
+            <span>Actualiser</span>
+          </button>
+          <div class="date-filter">
+            <AppSelect v-model="selectedPeriod" :options="periodOptions" />
+          </div>
         </div>
       </div>
     </div>
 
+    <Modal :show="showAddAppModal" title="Ajouter une application" @close="showAddAppModal = false">
+      <div class="form-group mb-4">
+        <label>Nom de l'application</label>
+        <input v-model="newApp.name" type="text" placeholder="Ex: My Super Game" class="form-input" />
+      </div>
+      <div class="form-group mb-4">
+        <label>Icône (Emoji)</label>
+        <input v-model="newApp.icon" type="text" placeholder="Ex: 🎮" class="form-input" />
+      </div>
+      <template #footer>
+        <button class="btn-ghost" @click="showAddAppModal = false">Annuler</button>
+        <button class="btn-primary" @click="handleAddApp" :disabled="!newApp.name">Créer</button>
+      </template>
+    </Modal>
+
     <!-- Global Stats Overview -->
-    <div class="stats-overview grid grid-3">
+    <div v-if="globalSummary" class="stats-overview flex flex-wrap gap-6">
       <div class="stat-card glass-panel gradient-blue">
         <div class="stat-icon">
           <component :is="Download" :size="32" class="text-blue-500" />
         </div>
         <div class="stat-content">
           <h3>Total Téléchargements</h3>
-          <div class="value">{{ formatNumber(globalStats.totalDownloads) }}</div>
-          <div class="trend positive"><span>+12.5%</span> <small>vs période précédente</small></div>
+          <div class="value">{{ formatNumber(globalSummary.totalDownloads) }}</div>
+          <div class="trend" :class="globalSummary.downloadsVariation >= 0 ? 'positive' : 'negative'">
+            <component :is="globalSummary.downloadsVariation >= 0 ? ArrowUpRight : ArrowDownRight" :size="16" />
+            <span>{{ Math.abs(globalSummary.downloadsVariation).toFixed(1) }}%</span>
+            <small>vs période précédente</small>
+          </div>
         </div>
       </div>
 
@@ -34,8 +58,12 @@
         </div>
         <div class="stat-content">
           <h3>Utilisateurs Actifs</h3>
-          <div class="value">{{ formatNumber(globalStats.activeUsers) }}</div>
-          <div class="trend positive"><span>+5.2%</span> <small>vs période précédente</small></div>
+          <div class="value">{{ formatNumber(globalSummary.activeUsers) }}</div>
+          <div class="trend" :class="globalSummary.activeUsersVariation >= 0 ? 'positive' : 'negative'">
+            <component :is="globalSummary.activeUsersVariation >= 0 ? ArrowUpRight : ArrowDownRight" :size="16" />
+            <span>{{ Math.abs(globalSummary.activeUsersVariation).toFixed(1) }}%</span>
+            <small>vs période précédente</small>
+          </div>
         </div>
       </div>
 
@@ -45,8 +73,33 @@
         </div>
         <div class="stat-content">
           <h3>Revenus Totaux</h3>
-          <div class="value">{{ formatCurrency(globalStats.totalRevenue) }}</div>
-          <div class="trend negative"><span>-2.1%</span> <small>vs période précédente</small></div>
+          <div class="value">{{ formatCurrency(globalSummary.totalRevenue) }}</div>
+          <div class="trend" :class="globalSummary.revenueVariation >= 0 ? 'positive' : 'negative'">
+            <component :is="globalSummary.revenueVariation >= 0 ? ArrowUpRight : ArrowDownRight" :size="16" />
+            <span>{{ Math.abs(globalSummary.revenueVariation).toFixed(1) }}%</span>
+            <small>vs période précédente</small>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="stat-card glass-panel"
+        style="
+          background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.2) 100%);
+          border-color: rgba(239, 68, 68, 0.3);
+        "
+      >
+        <div class="stat-icon">
+          <component :is="AlertTriangle" :size="32" class="text-red-500" />
+        </div>
+        <div class="stat-content">
+          <h3>Crashes</h3>
+          <div class="value">{{ formatNumber(globalSummary.totalCrashes || 0) }}</div>
+          <div class="trend" :class="(globalSummary.crashesVariation || 0) <= 0 ? 'positive' : 'negative'">
+            <component :is="(globalSummary.crashesVariation || 0) <= 0 ? ArrowDownRight : ArrowUpRight" :size="16" />
+            <span>{{ Math.abs(globalSummary.crashesVariation || 0).toFixed(1) }}%</span>
+            <small>vs période précédente</small>
+          </div>
         </div>
       </div>
     </div>
@@ -64,47 +117,101 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { dashboardService } from '@/services/dashboard.service'
+import { useDashboardStore } from '@/stores/useDashboardStore'
+import AppSelect from '@/components/Dashboard/ui/AppSelect.vue'
 import ChartComponent from '@/components/Dashboard/ChartComponent.vue'
-import { type ChartData, MetricType } from '@/types'
+import Modal from '@/components/Dashboard/ui/Modal.vue'
+import { type ChartData, type Summary } from '@/types'
 import { toast } from '@/composables/useToast'
-import { Download, Users, CircleDollarSign } from 'lucide-vue-next'
+import {
+  Download,
+  Users,
+  CircleDollarSign,
+  ArrowUpRight,
+  ArrowDownRight,
+  Plus,
+  RefreshCw,
+  AlertTriangle
+} from 'lucide-vue-next'
 
+const store = useDashboardStore()
 const loading = ref(true)
-const selectedPeriod = ref('30d')
+const isSyncing = ref(false)
+const showAddAppModal = ref(false)
+const newApp = ref({ name: '', icon: '🎮' })
 
-// Mock Global Stats for demo purposes (since user has no published apps yet)
-const globalStats = ref({
-  totalDownloads: 125430,
-  activeUsers: 45200,
-  totalRevenue: 3450.5
+const selectedPeriod = computed({
+  get: () => store.selectedPeriod,
+  set: (val) => store.setPeriod(val)
 })
 
+const periodOptions = [
+  { value: '7d', label: '7 derniers jours' },
+  { value: '30d', label: '30 derniers jours' },
+  { value: '90d', label: '3 mois' },
+  { value: '1y', label: '1 an' }
+]
+
+const globalSummary = ref<Summary | null>(null)
 const globalChartData = ref<ChartData>({
   label: 'Utilisateurs Actifs Quotidiens (Global)',
   data: []
 })
 
-onMounted(async () => {
+const fetchGlobalData = async () => {
+  loading.value = true
   try {
-    const { chartData, latestActiveUsers } = await dashboardService.getFormattedGlobalStats(MetricType.ACTIVE_USERS, 30)
-
-    globalChartData.value = chartData
-    globalStats.value.activeUsers = latestActiveUsers
-
-    // const downloads = await dashboardService.getFormattedGlobalStats(MetricType.DOWNLOADS, 30)
-    // const revenue = await dashboardService.getFormattedGlobalStats(MetricType.REVENUE, 30)
+    const data = await store.fetchGlobalStats(selectedPeriod.value)
+    globalChartData.value = data.chartData
+    globalSummary.value = data.summary
   } catch (error) {
     toast.error(error, 'Erreur lors du chargement des statistiques globales')
   } finally {
     loading.value = false
   }
+}
+
+onMounted(() => {
+  fetchGlobalData()
 })
 
+// Surveiller le changement de période pour rafraîchir les données
+watch(selectedPeriod, fetchGlobalData)
+
+const handleAddApp = async () => {
+  if (!newApp.value.name) return
+  try {
+    await store.addApplication(newApp.value.name, newApp.value.icon)
+    toast.success('Application créée avec succès')
+    showAddAppModal.value = false
+    newApp.value = { name: '', icon: '🎮' }
+  } catch (e) {
+    toast.error(e, 'Erreur lors de la création')
+  }
+}
+
+const handleSyncAll = async () => {
+  isSyncing.value = true
+  toast.info('Actualisation globale des données...')
+  try {
+    await dashboardService.syncAll()
+    store.clearStatsCache() // On vide le cache car le back a de nouvelles données
+    await fetchGlobalData()
+    toast.success('Toutes les données sont à jour')
+  } catch (e) {
+    toast.error(e, 'Échec de la synchronisation')
+  } finally {
+    isSyncing.value = false
+  }
+}
+
 const formatNumber = (num: number) => new Intl.NumberFormat('fr-FR').format(num)
-const formatCurrency = (amount: number) =>
-  new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount)
+const formatCurrency = (amount: number) => {
+  const currency = globalSummary.value?.currency || 'EUR'
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency }).format(amount)
+}
 </script>
 
 <style scoped>
@@ -122,19 +229,9 @@ const formatCurrency = (amount: number) =>
   margin-bottom: 1rem;
 }
 
-.period-select {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  outline: none;
-}
-
-.period-select option {
-  background: #2b3044;
-  color: #fff;
+.date-filter {
+  display: flex;
+  align-items: center;
 }
 
 .glass-panel {
@@ -167,6 +264,8 @@ const formatCurrency = (amount: number) =>
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  flex: 1;
+  min-width: 300px;
 }
 
 .stat-icon {

@@ -46,8 +46,12 @@
           <component :is="Home" :size="20" class="mr-3 shrink-0" /> Accueil
         </router-link>
 
-        <div class="flex flex-col gap-2 mt-4 flex-1 overflow-hidden" v-if="applications.length > 0">
+        <div
+          class="flex flex-col gap-2 mt-4 flex-1 overflow-hidden"
+          v-if="activeApplications.length > 0 || archivedApplications.length > 0"
+        >
           <button
+            v-if="activeApplications.length > 0"
             class="flex items-center justify-between text-white/40 hover:text-teal transition-colors focus:outline-none px-4 mb-2 cursor-pointer w-full"
             @click="isProjectsExpanded = !isProjectsExpanded"
           >
@@ -89,6 +93,38 @@
               </div>
             </div>
           </div>
+
+          <div class="mt-4" v-if="archivedApplications.length > 0">
+            <button
+              class="flex items-center justify-between text-white/20 hover:text-teal transition-colors focus:outline-none px-4 mb-2 cursor-pointer w-full"
+              @click="isArchivesExpanded = !isArchivesExpanded"
+            >
+              <span class="text-[0.8rem] uppercase tracking-[2px] font-bold">Archives</span>
+              <component
+                :is="ChevronDown"
+                :size="16"
+                class="transition-transform duration-300"
+                :class="isArchivesExpanded ? 'rotate-180' : ''"
+              />
+            </button>
+
+            <div
+              class="flex flex-col overflow-hidden transition-all duration-300"
+              :class="isArchivesExpanded ? 'opacity-100 max-h-[300px]' : 'max-h-0 opacity-0'"
+            >
+              <div class="flex flex-col gap-1 mx-1 px-4">
+                <div
+                  v-for="app in archivedApplications"
+                  :key="app.id"
+                  class="flex items-center gap-3 p-2 rounded-lg text-white/30 cursor-pointer transition-all duration-200 hover:bg-white/5 hover:text-white/60"
+                  @click="navigateToGame(app.id)"
+                >
+                  <component :is="Archive" :size="16" class="shrink-0" />
+                  <span class="text-sm whitespace-nowrap overflow-hidden text-ellipsis">{{ app.name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="mt-auto border-t border-teal/20 pt-8 flex flex-col gap-2">
@@ -116,6 +152,16 @@
     >
       <slot />
     </main>
+
+    <ConfirmModal
+      :show="showLogoutConfirm"
+      title="Déconnexion"
+      message="Voulez-vous vraiment vous déconnecter de votre session ?"
+      confirm-text="Se déconnecter"
+      is-dangerous
+      @confirm="executeLogout"
+      @cancel="showLogoutConfirm = false"
+    />
   </div>
 </template>
 
@@ -123,23 +169,32 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService } from '@/services/auth.service'
-import { dashboardService } from '@/services/dashboard.service'
-import type { Application } from '@/types'
-import { toast } from '@/composables/useToast'
-import { BarChart2, Menu, X, Home, ChevronDown, Gamepad2, Globe, LogOut } from 'lucide-vue-next'
+import { useDashboardStore } from '@/stores/useDashboardStore'
+import ConfirmModal from '@/components/Dashboard/ui/ConfirmModal.vue'
+import { BarChart2, Menu, X, Home, ChevronDown, Gamepad2, Globe, LogOut, Archive } from 'lucide-vue-next'
 
 const router = useRouter()
-
-const applications = ref<Application[]>([])
+const store = useDashboardStore()
 
 const isMobileMenuOpen = ref(false)
 const isProjectsExpanded = ref(true)
+const isArchivesExpanded = ref(false)
+const showLogoutConfirm = ref(false)
 const searchQuery = ref('')
 
+const activeApplications = computed(() => {
+  return store.applications.filter((app) => app.active !== false)
+})
+
+const archivedApplications = computed(() => {
+  return store.applications.filter((app) => app.active === false)
+})
+
 const filteredGames = computed(() => {
-  if (!searchQuery.value) return applications.value
+  const apps = activeApplications.value
+  if (!searchQuery.value) return apps
   const query = searchQuery.value.toLowerCase()
-  return applications.value.filter((application) => application.name.toLowerCase().includes(query))
+  return apps.filter((application) => application.name.toLowerCase().includes(query))
 })
 
 const toggleMobileMenu = () => {
@@ -147,6 +202,10 @@ const toggleMobileMenu = () => {
 }
 
 const logout = () => {
+  showLogoutConfirm.value = true
+}
+
+const executeLogout = () => {
   authService.logout()
   router.push('/login')
 }
@@ -156,12 +215,8 @@ const navigateToGame = (applicationId: string) => {
   router.push(`/application/${applicationId}`)
 }
 
-onMounted(async () => {
-  try {
-    applications.value = await dashboardService.getAllGames()
-  } catch (error) {
-    toast.error(error, 'Impossible de charger les projets pour le menu')
-  }
+onMounted(() => {
+  store.fetchApplications()
 })
 </script>
 

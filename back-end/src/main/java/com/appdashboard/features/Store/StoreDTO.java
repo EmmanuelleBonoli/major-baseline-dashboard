@@ -8,13 +8,15 @@ public record StoreDTO(
                 UUID id,
                 String packageName,
                 String bundleId,
-                Platform platform) {
+                Platform platform,
+                boolean active) {
 
         public static StoreDTO fromEntityToDTO(Store store) {
                 return new StoreDTO(
                                 store.getId(),
                                 store.getPackageName(),
                                 store.getBundleId(),
-                                store.getPlatform());
+                                store.getPlatform(),
+                                store.isActive());
         }
 }
