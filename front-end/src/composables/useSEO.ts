@@ -1,5 +1,5 @@
 import { useHead, useSeoMeta } from '@unhead/vue'
-import { computed, type Ref } from 'vue'
+import { computed, unref, type Ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 export interface SEOOptions {
@@ -22,26 +22,24 @@ export function useSEO(options: SEOOptions = {}) {
   const isPublic = computed(() => route?.meta?.requiresAuth === false)
 
   const title = computed(() => {
-    const t = typeof options.title === 'string' ? options.title : options.title?.value
+    const t = unref(options.title)
     return t ? `${t} | ${siteName}` : siteName
   })
 
   const description = computed(() => {
-    return (
-      (typeof options.description === 'string' ? options.description : options.description?.value) || defaultDescription
-    )
+    return unref(options.description) || defaultDescription
   })
 
   const keywords = computed(() => {
-    return (typeof options.keywords === 'string' ? options.keywords : options.keywords?.value) || defaultKeywords
+    return unref(options.keywords) || defaultKeywords
   })
 
   const type = computed(() => {
-    return (typeof options.type === 'string' ? options.type : options.type?.value) || 'website'
+    return unref(options.type) || 'website'
   })
 
   const image = computed(() => {
-    return (typeof options.image === 'string' ? options.image : options.image?.value) || '/og-image.png'
+    return unref(options.image) || '/og-image.png'
   })
 
   const structuredData = computed(() => {
@@ -74,6 +72,24 @@ export function useSEO(options: SEOOptions = {}) {
     }
   })
 
+  const scripts = computed(() => {
+    const items = []
+    if (structuredData.value) {
+      items.push({
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(structuredData.value)
+      })
+    }
+    const customSchema = unref(options.schema)
+    if (customSchema) {
+      items.push({
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(customSchema)
+      })
+    }
+    return items
+  })
+
   useHead({
     title,
     link: [{ rel: 'canonical', href: `https://major-baseline.com${route.path}` }],
@@ -81,20 +97,7 @@ export function useSEO(options: SEOOptions = {}) {
       { name: 'keywords', content: keywords },
       { name: 'author', content: 'Emmanuelle Bonoli' }
     ],
-    script: [
-      structuredData.value
-        ? {
-            type: 'application/ld+json',
-            innerHTML: JSON.stringify(structuredData.value)
-          }
-        : {},
-      options.schema
-        ? {
-            type: 'application/ld+json',
-            innerHTML: JSON.stringify(options.schema)
-          }
-        : {}
-    ]
+    script: scripts
   })
 
   if (isPublic.value) {
