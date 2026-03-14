@@ -6,16 +6,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.security.KeyFactory;
-import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -35,10 +31,6 @@ public class AppleAppStoreService {
     @Value("${stores.apple.private-key}")
     private String privateKeyContent;
 
-    private static final String APP_STORE_CONNECT_API = "https://api.appstoreconnect.apple.com/v1";
-
-    private final RestTemplate restTemplate = new RestTemplate();
-
     /**
      * Génère un JWT pour l'authentification App Store Connect API
      */
@@ -52,7 +44,7 @@ public class AppleAppStoreService {
         byte[] encoded = Base64.getDecoder().decode(privateKeyPEM);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
         KeyFactory keyFactory = KeyFactory.getInstance("EC");
-        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+        keyFactory.generatePrivate(keySpec); 
 
         long now = System.currentTimeMillis();
 
@@ -83,57 +75,18 @@ public class AppleAppStoreService {
      * Récupère les statistiques pour une store iOS
      */
     public List<AppStats> fetchStats(Store store, LocalDate startDate, LocalDate endDate) {
-        List<AppStats> statsList = new ArrayList<>();
-
-        try {
-            HttpHeaders headers = createHeaders();
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-
-            // Récupérer les métriques de ventes
-            String salesUrl = String.format(
-                    "%s/salesReports?filter[frequency]=DAILY&filter[reportDate]=%s&filter[vendorNumber]=%s",
-                    APP_STORE_CONNECT_API,
-                    startDate,
-                    store.getAppStoreId());
-
-            // Note: L'API App Store Connect nécessite une configuration spécifique
-            // et retourne des données dans un format particulier
-            // Ceci est un exemple simplifié
-
-            log.info("Fetching stats for {} from {} to {}",
-                    store.getBundleId(), startDate, endDate);
-
-            // TODO: Implémenter la récupération réelle des données
-
-        } catch (Exception e) {
-            log.error("Error fetching App Store stats for {}: {}",
-                    store.getBundleId(), e.getMessage());
-        }
-
-        return statsList;
+        log.info("Fetching stats for {} from {} to {}", store.getBundleId(), startDate, endDate);
+        
+        // Simulation pour l'instant : on redirige vers le générateur de mock centralisé
+        // TODO: Implémenter le vrai appel vers App Store Connect API
+        return com.appdashboard.features.AppStats.StatsMockGenerator.generateStats(store, startDate, endDate);
     }
 
     /**
-     * Récupère les données d'analyse (Analytics)
+     * Récupère les données d'analyse (Placeholder pour future intégration réelle)
      */
     public List<AppStats> fetchAnalytics(Store store, LocalDate startDate, LocalDate endDate) {
-        try {
-            HttpHeaders headers = createHeaders();
-            HttpEntity<String> entity = new HttpEntity<>(headers);
-
-            // Endpoint pour les analytics
-            String analyticsUrl = String.format(
-                    "%s/analyticsReportRequests",
-                    APP_STORE_CONNECT_API);
-
-            // TODO: Créer et soumettre une requête d'analytics
-
-            log.info("Fetching analytics for {}", store.getBundleId());
-
-        } catch (Exception e) {
-            log.error("Error fetching analytics: {}", e.getMessage());
-        }
-
-        return new ArrayList<>();
+        log.info("Fetching analytics for {} (Mock mode)", store.getBundleId());
+        return java.util.Collections.emptyList();
     }
 }

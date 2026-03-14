@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { getErrorMessage } from '@/utils/error'
 
-export type ToastType = 'success' | 'warning' | 'error'
+export type ToastType = 'success' | 'warning' | 'error' | 'info'
 
 export interface Toast {
   id: number
@@ -27,6 +27,7 @@ export const removeToast = (id: number) => {
 export const toast = {
   success: (message: string, duration?: number) => addToast(message, 'success', duration),
   warning: (message: string, duration?: number) => addToast(message, 'warning', duration),
+  info: (message: string, duration?: number) => addToast(message, 'info', duration),
   error: (error: unknown, fallbackMessage?: string, duration?: number) => {
     const msg =
       typeof error === 'string' && !fallbackMessage

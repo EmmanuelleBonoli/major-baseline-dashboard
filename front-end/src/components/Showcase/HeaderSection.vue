@@ -36,7 +36,7 @@
         </ul>
         <router-link
           :to="isAuthenticated ? '/dashboard' : '/login'"
-          class="btn-primary text-teal border-2 border-teal rounded py-2.5 px-6 lg:px-8 no-underline font-bold text-[0.95rem] lg:text-[1.1rem] tracking-[2px] uppercase shrink-0 ml-4 h-fit"
+          class="btn-primary rounded py-2.5 px-6 lg:px-8 no-underline font-bold text-[0.95rem] lg:text-[1.1rem] tracking-[2px] uppercase shrink-0 ml-4 h-fit text-white"
         >
           {{ isAuthenticated ? 'DASHBOARD' : 'CONNEXION' }}
         </router-link>
@@ -59,7 +59,7 @@
           <li class="mt-8" @click="toggleMenu">
             <router-link
               :to="isAuthenticated ? '/dashboard' : '/login'"
-              class="btn-primary text-teal border-2 border-teal rounded py-3 px-8 no-underline font-black text-[1.5rem] tracking-[3px] uppercase inline-block"
+              class="btn-primary text-white border-2 border-teal rounded py-3 px-8 no-underline font-black text-[1.5rem] tracking-[3px] uppercase inline-block"
             >
               {{ isAuthenticated ? 'DASHBOARD' : 'CONNEXION' }}
             </router-link>

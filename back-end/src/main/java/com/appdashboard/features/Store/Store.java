@@ -33,6 +33,9 @@ public class Store extends BaseEntity {
     @Column(name = "app_store_id")
     private String appStoreId;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     public enum Platform {
         ANDROID,
         IOS

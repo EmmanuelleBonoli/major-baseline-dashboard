@@ -14,13 +14,28 @@ public class StoreService {
     private final StoreRepository storeRepository;
 
     public List<StoreDTO> getAllStores() {
-        return storeRepository.findAll().stream()
+        return getAllStoreEntities().stream()
                 .map(StoreDTO::fromEntityToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public List<Store> getAllStoreEntities() {
+        return storeRepository.findAll();
     }
 
     public Store getStoreById(UUID storeId) {
         return storeRepository.findById(storeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Store introuvable"));
+    }
+
+    public StoreDTO createStore(Store store) {
+        Store saved = storeRepository.save(store);
+        return StoreDTO.fromEntityToDTO(saved);
+    }
+
+    public void deleteStore(UUID storeId) {
+        Store store = getStoreById(storeId);
+        store.setActive(false);
+        storeRepository.save(store);
     }
 }

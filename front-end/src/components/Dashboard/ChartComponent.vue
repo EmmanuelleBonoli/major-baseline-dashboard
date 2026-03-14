@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-container">
+  <div class="chart-container" :style="{ height: height + 'px' }">
     <canvas ref="chartCanvas"></canvas>
   </div>
 </template>
@@ -40,11 +40,13 @@ interface Props {
   chartData: ChartData
   type?: 'line' | 'bar'
   color?: string
+  height?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'line',
-  color: '#3b82f6'
+  color: '#3b82f6',
+  height: 300
 })
 
 const chartCanvas = ref<HTMLCanvasElement | null>(null)
@@ -127,7 +129,6 @@ watch(
 <style scoped>
 .chart-container {
   position: relative;
-  height: 300px;
   width: 100%;
 }
 </style>

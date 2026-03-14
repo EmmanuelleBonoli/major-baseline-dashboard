@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 -2 88 70" width="32" height="32">
+  <defs>
+    <style>
+      .m-letter { fill: #ffffff; }
+      .b-letter { fill: #d4af37; }
+      @media (prefers-color-scheme: light) {
+        .m-letter { fill: #0B1A21; }
+      }
+    </style>
+  </defs>
+  <path d="M0.75 63.75 L0.75 0.75 L63.25 0.75 L63.25 63.75" stroke="#1a8b9d" stroke-width="3" fill="none"/>
+  <line x1="-10" y1="32" x2="74" y2="32" stroke="#1a8b9d" stroke-width="2" opacity="0.7"/>
+  <line x1="0.25" y1="63.75" x2="63.75" y2="63.75" stroke="#d4af37" stroke-width="5"/>
+  <text x="19" y="32" font-family="sans-serif" font-weight="900" font-size="36" class="m-letter" text-anchor="middle" dominant-baseline="central" letter-spacing="-1">M</text>
+  <text x="45" y="32" font-family="sans-serif" font-weight="900" font-size="36" class="b-letter" text-anchor="middle" dominant-baseline="central" letter-spacing="-1">B</text>
+</svg>

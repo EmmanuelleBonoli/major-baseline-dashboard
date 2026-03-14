@@ -23,6 +23,9 @@ public class Application extends BaseEntity {
 
     private String icon;
 
-    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+    @Column(nullable = false)
+    private boolean active = true;
+
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL, fetch = jakarta.persistence.FetchType.EAGER)
     private List<Store> stores = new ArrayList<>();
 }
