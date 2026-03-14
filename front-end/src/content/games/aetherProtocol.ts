@@ -9,7 +9,9 @@ export const aetherProtocol: ShowcaseApp = {
   status: 'Alpha disponible',
   publishDate: '2025-06-15',
   description: `
-Eclipse explore le rythme, la lumière et le silence
-dans une expérience mobile minimaliste.
-  `
+L'élite des commandos interstellaires face au protocole Aether.
+Un jeu tactique nerveux et précis.
+  `,
+  images: [],
+  techStack: ['Capacitor', 'Vue.js', 'Typescript', 'Spring Boot']
 }

@@ -1,41 +1,45 @@
 <template>
-  <router-link
-    :to="`/project/${application.id}`"
-    class="app-card group cursor-pointer relative bg-black/60 border-y sm:border-2 border-teal overflow-hidden transition-all duration-500 flex flex-col"
-  >
-    <div
-      class="card-header w-full h-[200px] md:h-[300px] flex items-center justify-center text-[4rem] md:text-[6rem] relative overflow-hidden shrink-0"
+  <article class="h-full">
+    <router-link
+      :to="`/project/${application.id}`"
+      class="app-card group cursor-pointer relative bg-black/60 border-y sm:border-2 border-teal overflow-hidden transition-all duration-500 flex flex-col h-full"
+      role="link"
+      :aria-label="`Voir les détails du projet ${application.title}`"
     >
-      <span class="card-icon relative z-[2]">{{ application.icon }}</span>
-    </div>
-
-    <div class="p-6 sm:p-8 md:p-10 bg-black/80 flex-1 flex flex-col">
-      <h3
-        class="text-[1.5rem] md:text-[2rem] mb-3 md:mb-4 text-gold uppercase tracking-[2px] md:tracking-[3px] font-black leading-tight"
-      >
-        {{ application.title }}
-      </h3>
-      <div class="flex flex-wrap gap-2 mb-4">
-        <span
-          v-for="category in application.category"
-          :key="category"
-          class="inline-block py-1 px-2 md:py-2 md:px-4 bg-teal/20 border border-teal text-teal text-[0.7rem] md:text-[0.9rem] uppercase tracking-[1px] font-bold"
-        >
-          {{ category }}
-        </span>
-      </div>
-      <p class="text-slate-custom text-[0.9rem] md:text-[1rem] leading-[1.6] md:leading-[1.8] mb-6 flex-1">
-        {{ application.tagline }}
-      </p>
-
       <div
-        class="mt-auto inline-flex items-center gap-2 text-gold font-bold uppercase tracking-[1px] md:tracking-[2px] text-[0.8rem] md:text-[1rem]"
+        class="card-header w-full h-[200px] md:h-[300px] flex items-center justify-center text-[4rem] md:text-[6rem] relative overflow-hidden shrink-0"
       >
-        <span class="pulse-indicator w-2 md:w-2.5 h-2 md:h-2.5 bg-gold rounded-full"></span>
-        {{ application.status }}
+        <span class="card-icon relative z-[2]">{{ application.icon }}</span>
       </div>
-    </div>
-  </router-link>
+
+      <div class="p-6 sm:p-8 md:p-10 bg-black/80 flex-1 flex flex-col">
+        <h3
+          class="text-[1.5rem] md:text-[2rem] mb-3 md:mb-4 text-gold uppercase tracking-[2px] md:tracking-[3px] font-black leading-tight"
+        >
+          {{ application.title }}
+        </h3>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span
+            v-for="category in application.category"
+            :key="category"
+            class="inline-block py-1 px-2 md:py-2 md:px-4 bg-teal/20 border border-teal text-teal text-[0.7rem] md:text-[0.9rem] uppercase tracking-[1px] font-bold"
+          >
+            {{ category }}
+          </span>
+        </div>
+        <p class="text-slate-custom text-[0.9rem] md:text-[1rem] leading-[1.6] md:leading-[1.8] mb-6 flex-1">
+          {{ application.tagline }}
+        </p>
+
+        <div
+          class="mt-auto inline-flex items-center gap-2 text-gold font-bold uppercase tracking-[1px] md:tracking-[2px] text-[0.8rem] md:text-[1rem]"
+        >
+          <span class="pulse-indicator w-2 md:w-2.5 h-2 md:h-2.5 bg-gold rounded-full"></span>
+          {{ application.status }}
+        </div>
+      </div>
+    </router-link>
+  </article>
 </template>
 
 <script setup lang="ts">

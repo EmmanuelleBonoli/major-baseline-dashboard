@@ -11,5 +11,6 @@ export const cyberNexus: ShowcaseApp = {
 Aurora explore le rythme, la lumière et le silence
 dans une expérience mobile minimaliste.
   `,
-  images: ['/images/aurora1.png', '/images/aurora2.png']
+  images: ['/images/aurora1.png', '/images/aurora2.png'],
+  techStack: ['C#', 'Firebase', 'Shader Graph']
 }

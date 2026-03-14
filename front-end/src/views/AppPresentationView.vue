@@ -7,7 +7,7 @@
       class="px-4 py-4 md:p-8 flex justify-between items-center max-w-[1600px] mx-auto absolute top-0 w-full left-1/2 -translate-x-1/2 z-10"
     >
       <router-link
-        to="/"
+        to="/#projects"
         class="btn-back flex items-center gap-2 text-teal uppercase tracking-[1px] md:tracking-[3px] text-sm md:text-base font-bold py-2 md:py-2 px-4 md:px-6 border-2 border-teal transition-all duration-300"
       >
         &lt; Retour au site
@@ -73,7 +73,7 @@
       </div>
 
       <div
-        class="description-card w-full p-6 sm:p-8 md:p-10 bg-black/60 border-y sm:border-x border-teal/30 backdrop-blur-md mb-10 md:mb-16 relative"
+        class="description-card w-full p-6 sm:p-8 md:p-10 bg-black/60 border-y sm:border-x border-teal/30 backdrop-blur-md mb-10 md:mb-12 relative"
       >
         <h2
           class="text-lg md:text-2xl font-bold tracking-[1px] md:tracking-[3px] text-teal uppercase mb-4 md:mb-6 flex items-center gap-4"
@@ -85,6 +85,30 @@
           class="text-slate-custom text-[0.95rem] md:text-[1.1rem] leading-[1.8] md:leading-[2] font-light whitespace-pre-line"
         >
           {{ application.description || 'Description en cours de rédaction...' }}
+        </div>
+      </div>
+
+      <div
+        v-if="application.techStack && application.techStack.length > 0"
+        class="description-card w-full p-6 sm:p-8 md:p-10 bg-black/60 border-y sm:border-x border-gold/30 backdrop-blur-md mb-10 md:mb-16 relative"
+      >
+        <h2
+          class="text-lg md:text-2xl font-bold tracking-[1px] md:tracking-[3px] text-gold uppercase mb-4 md:mb-6 flex items-center gap-4"
+        >
+          <span class="w-4 md:w-8 h-[2px] bg-gold shrink-0"></span> Stack Technique
+          <span class="w-full h-[1px] bg-gradient-to-r from-gold/20 to-transparent flex-1"></span>
+        </h2>
+        <div class="flex flex-wrap gap-3 md:gap-6 mt-6">
+          <div
+            v-for="tech in application.techStack"
+            :key="tech"
+            class="flex flex-col items-center gap-2 bg-white/5 border border-white/10 p-4 min-w-[100px] md:min-w-[140px] transition-all hover:bg-gold/10 hover:border-gold/30 group"
+          >
+            <span class="text-[0.7rem] md:text-[0.8rem] text-white/50 group-hover:text-gold uppercase tracking-widest"
+              >Tech</span
+            >
+            <span class="text-[0.9rem] md:text-lg font-black text-white group-hover:text-gold">{{ tech }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -111,6 +135,7 @@ import { useRoute } from 'vue-router'
 import { gamesMap } from '@/content/games/index'
 import { applicationsMap } from '@/content/applications/index'
 import { useParticles } from '@/composables/useParticles'
+import { useSEO } from '@/composables/useSEO'
 import FooterSection from '@/components/Showcase/FooterSection.vue'
 
 useParticles()
@@ -120,6 +145,26 @@ const route = useRoute()
 const application = computed(() => {
   const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
   return gamesMap[id] || applicationsMap[id]
+})
+
+useSEO({
+  title: computed(() => (application.value ? application.value.title : 'Chargement...')),
+  schema: computed(() => {
+    if (!application.value) return null
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: application.value.title,
+      description: application.value.tagline,
+      applicationCategory: application.value.category[0] || 'Game',
+      operatingSystem: 'Mobile',
+      author: {
+        '@type': 'Person',
+        name: 'Emmanuelle Bonoli'
+      },
+      keywords: application.value.techStack?.join(', ') || ''
+    }
+  })
 })
 
 watchEffect(() => {
