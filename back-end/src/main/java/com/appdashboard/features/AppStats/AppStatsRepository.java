@@ -13,11 +13,6 @@ import java.util.UUID;
 @Repository
 public interface AppStatsRepository extends JpaRepository<AppStats, UUID> {
 
-        List<AppStats> findByStoreIdAndMetricTypeAndDateBetween(
-                        UUID storeId,
-                        AppStats.MetricType metricType,
-                        LocalDate startDate,
-                        LocalDate endDate);
 
         Optional<AppStats> findByStoreIdAndDateAndMetricType(
                         UUID storeId,
@@ -32,15 +27,9 @@ public interface AppStatsRepository extends JpaRepository<AppStats, UUID> {
                         @Param("startDate") LocalDate startDate,
                         @Param("endDate") LocalDate endDate);
 
-        @Query("SELECT new com.appdashboard.features.AppStats.StatsDTO(s.date, s.metricType, SUM(s.value), SUM(s.revenueAmount), s.currency) "
-                        +
-                        "FROM AppStats s " +
-                        "WHERE s.metricType = :metricType " +
-                        "AND s.date >= :startDate AND s.date <= :endDate " +
-                        "GROUP BY s.date, s.metricType, s.currency " +
-                        "ORDER BY s.date ASC")
-        List<StatsDTO> findGlobalStatsByMetricAndDateRange(
-                        @Param("metricType") AppStats.MetricType metricType,
+
+        @Query("SELECT s FROM AppStats s WHERE s.date >= :startDate AND s.date <= :endDate ORDER BY s.date ASC")
+        List<AppStats> findGlobalStatsByDateRange(
                         @Param("startDate") LocalDate startDate,
                         @Param("endDate") LocalDate endDate);
 }

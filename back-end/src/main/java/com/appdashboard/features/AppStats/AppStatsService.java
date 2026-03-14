@@ -25,35 +25,26 @@ public class AppStatsService {
     private final GooglePlayService googlePlayService;
     private final AppleAppStoreService appleAppStoreService;
 
-    public List<StatsDTO> getStatsByMetric(
-            UUID storeId,
-            AppStats.MetricType metricType,
-            LocalDate startDate,
-            LocalDate endDate) {
-        if (shouldFetchNewData(storeId, startDate, endDate)) {
-            Store store = storeService.getStoreById(storeId);
-            fetchAndSaveStats(store, startDate, endDate);
-        }
-
-        return statsRepository.findByStoreIdAndMetricTypeAndDateBetween(
-                storeId, metricType, startDate, endDate).stream()
-                .map(StatsDTO::fromEntityToDTO)
-                .collect(Collectors.toList());
-    }
 
     @Transactional
-    public void syncStoreData(UUID storeId) {
-        Store store = storeService.getStoreById(storeId);
+    public void syncAllActiveStores() {
+        log.info("Lancement de la synchronisation globale...");
+        List<Store> activeStores = storeService.getAllStoreEntities().stream()
+                .filter(s -> s.isActive() && s.getApplication().isActive())
+                .collect(Collectors.toList());
+
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(30);
 
-        fetchAndSaveStats(store, startDate, endDate);
-
-        log.info("Sync manuel terminé pour l'app {}", store.getApplication().getName());
+        for (Store store : activeStores) {
+            fetchAndSaveStats(store, startDate, endDate);
+        }
+        log.info("Synchronisation globale terminée ({} stores synchronisés)", activeStores.size());
     }
 
-    public List<StatsDTO> getGlobalStats(AppStats.MetricType metricType, LocalDate startDate, LocalDate endDate) {
-        return statsRepository.findGlobalStatsByMetricAndDateRange(metricType, startDate, endDate);
+
+    public List<AppStats> getGlobalStatsByDateRange(LocalDate startDate, LocalDate endDate) {
+        return statsRepository.findGlobalStatsByDateRange(startDate, endDate);
     }
 
     public List<AppStats> fetchAndGetStatsForDateRange(UUID storeId, LocalDate startDate, LocalDate endDate) {
@@ -118,6 +109,7 @@ public class AppStatsService {
                                 existing -> {
                                     existing.setValue(stat.getValue());
                                     existing.setRevenueAmount(stat.getRevenueAmount());
+                                    existing.setCurrency(stat.getCurrency());
                                     statsRepository.save(existing);
                                 },
                                 () -> statsRepository.save(stat));

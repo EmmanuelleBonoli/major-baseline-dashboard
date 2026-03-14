@@ -1,5 +1,5 @@
 import { api } from './api'
-import type { Store, AppDashboard, Stats, MetricType, Application } from '@/types'
+import type { Store, AppDashboard, Application } from '@/types'
 
 export const dashboardApi = {
   // Récupérer toutes les stores
@@ -13,34 +13,59 @@ export const dashboardApi = {
   },
 
   // Récupérer le dashboard d'une store
-  getAppDashboard(appId: string, startDate?: string, endDate?: string): Promise<AppDashboard> {
+  getAppDashboard(storeId: string, startDate?: string, endDate?: string): Promise<AppDashboard> {
     const params: any = {}
     if (startDate) params.startDate = startDate
     if (endDate) params.endDate = endDate
 
-    return api.get(`/dashboard/stores/${appId}`, { params }).then((res) => res.data)
+    return api.get(`/dashboard/stores/${storeId}`, { params }).then((res) => res.data)
   },
 
-  // Récupérer les stats globales
-  getGlobalStats(metricType: MetricType, startDate: string, endDate: string): Promise<Stats[]> {
-    return api
-      .get('/dashboard/global-stats', {
-        params: { metricType, startDate, endDate }
-      })
-      .then((res) => res.data)
+  // Récupérer le dashboard d'une application (agrégé)
+  getApplicationDashboard(appId: string, startDate?: string, endDate?: string): Promise<AppDashboard> {
+    const params: any = {}
+    if (startDate) params.startDate = startDate
+    if (endDate) params.endDate = endDate
+
+    return api.get(`/dashboard/applications/${appId}/stats`, { params }).then((res) => res.data)
   },
 
-  // Récupérer des stats spécifiques
-  getStats(appId: string, metricType: MetricType, startDate: string, endDate: string): Promise<Stats[]> {
-    return api
-      .get(`/dashboard/stores/${appId}/stats`, {
-        params: { metricType, startDate, endDate }
-      })
-      .then((res) => res.data)
+  // Récupérer le dashboard global (agrégé)
+  getGlobalSummary(startDate?: string, endDate?: string): Promise<AppDashboard> {
+    const params: any = {}
+    if (startDate) params.startDate = startDate
+    if (endDate) params.endDate = endDate
+
+    return api.get('/dashboard/global-summary', { params }).then((res) => res.data)
   },
 
-  // Synchroniser les données du store
-  syncStoreData(appId: string): Promise<void> {
-    return api.post(`/dashboard/stores/${appId}/sync`)
+  // Créer un nouveau jeu
+  createGame(game: Partial<Application>): Promise<Application> {
+    return api.post('/dashboard/applications', game).then((res) => res.data)
+  },
+
+  // Supprimer un jeu (cascade)
+  deleteGame(id: string): Promise<void> {
+    return api.delete(`/dashboard/applications/${id}`)
+  },
+
+  // Restaurer un jeu archivé
+  restoreGame(id: string): Promise<void> {
+    return api.post(`/dashboard/applications/${id}/restore`)
+  },
+
+  // Synchronisation globale (tous les projets actifs)
+  syncAll(): Promise<void> {
+    return api.post('/dashboard/sync-all')
+  },
+
+  // Ajouter un store à un jeu
+  addStore(appId: string, store: Partial<Store>): Promise<Store> {
+    return api.post(`/dashboard/applications/${appId}/stores`, store).then((res) => res.data)
+  },
+
+  // Supprimer un store (soft delete)
+  deleteStore(id: string): Promise<void> {
+    return api.delete(`/dashboard/stores/${id}`)
   }
 }

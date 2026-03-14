@@ -26,6 +26,7 @@ export interface Store {
   platform: Platform
   icon?: string
   applicationId?: string
+  active?: boolean
 }
 
 export interface Application {
@@ -33,6 +34,7 @@ export interface Application {
   name: string
   icon?: string
   studio?: string
+  active?: boolean
   stores: Store[]
 }
 
@@ -46,11 +48,15 @@ export interface Stats {
 
 export interface Summary {
   totalDownloads: number
+  downloadsVariation: number
   activeUsers: number
+  activeUsersVariation: number
   totalRevenue: number
+  revenueVariation: number
   currency: string
+  totalCrashes?: number
+  crashesVariation?: number
   avgRating?: number
-  totalReviews?: number
 }
 
 export interface DataPoint {
@@ -63,10 +69,19 @@ export interface ChartData {
   data: DataPoint[]
 }
 
+export interface StoreSummary {
+  storeId: string
+  downloads: number
+  revenue: number
+  currency: string
+  averageRating: number
+}
+
 export interface AppDashboard {
   store: Store
   summary: Summary
   charts: ChartData[]
+  storeSummaries: StoreSummary[]
 }
 
 export interface DateRange {

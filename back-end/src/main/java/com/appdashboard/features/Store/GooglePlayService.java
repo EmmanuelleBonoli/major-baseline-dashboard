@@ -1,6 +1,7 @@
 package com.appdashboard.features.Store;
 
 import com.appdashboard.features.AppStats.AppStats;
+import com.appdashboard.features.AppStats.StatsMockGenerator;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,67 +48,22 @@ public class GooglePlayService {
     /**
      * Récupère les statistiques pour une store Android
      */
+    /**
+     * Récupère les statistiques pour une store Android
+     */
     public List<AppStats> fetchStats(Store store, LocalDate startDate, LocalDate endDate) {
-        List<AppStats> statsList = new ArrayList<>();
-
-        try {
-            AndroidPublisher publisher = getAndroidPublisher();
-
-            // Note: L'API Google Play ne fournit pas directement toutes les métriques
-            // Il faut utiliser Google Play Console Reporting API ou Cloud Storage exports
-            // Ceci est un exemple simplifié - vous devrez adapter selon vos besoins
-
-            // Exemple pour récupérer les statistiques d'installations
-            // var response = publisher.reviews()
-            // .list(store.getPackageName())
-            // .execute();
-
-            log.info("Fetching stats for {} from {} to {}",
-                    store.getPackageName(), startDate, endDate);
-
-            // TODO: Implémenter la récupération réelle des données
-            // Pour l'instant, retourne une liste vide
-
-        } catch (Exception e) {
-            log.error("Error fetching Google Play stats for {}: {}",
-                    store.getPackageName(), e.getMessage());
-        }
-
-        return statsList;
+        log.info("Fetching stats for {} from {} to {}", store.getPackageName(), startDate, endDate);
+        
+        // Simulation pour l'instant : on redirige vers le générateur de mock centralisé
+        // TODO: Implémenter le vrai appel vers Android Publisher API
+        return StatsMockGenerator.generateStats(store, startDate, endDate);
     }
 
     /**
-     * Récupère les notes et avis
+     * Récupère les notes et avis (Placeholder pour future intégration réelle)
      */
     public AppStats fetchRatings(Store store, LocalDate date) {
-        try {
-            AndroidPublisher publisher = getAndroidPublisher();
-
-            // Récupérer les avis
-            var reviews = publisher.reviews()
-                    .list(store.getPackageName())
-                    .execute();
-
-            AppStats stats = new AppStats();
-            stats.setStore(store);
-            stats.setDate(date);
-            stats.setMetricType(AppStats.MetricType.RATINGS);
-
-            // Calculer la moyenne des notes
-            if (reviews.getReviews() != null && !reviews.getReviews().isEmpty()) {
-                double avgRating = reviews.getReviews().stream()
-                        .mapToInt(r -> r.getComments().get(0).getUserComment().getStarRating())
-                        .average()
-                        .orElse(0.0);
-
-                stats.setValue((long) (avgRating * 100)); // Stocké en centièmes
-            }
-
-            return stats;
-
-        } catch (Exception e) {
-            log.error("Error fetching ratings: {}", e.getMessage());
-            return null;
-        }
+        log.info("Fetching ratings for {} (Mock mode)", store.getPackageName());
+        return null;
     }
 }

@@ -10,6 +10,7 @@ public record ApplicationDTO(
                 UUID id,
                 String name,
                 String icon,
+                boolean active,
                 List<StoreDTO> stores) {
 
         public static ApplicationDTO fromEntityToDTO(Application application) {
@@ -17,6 +18,7 @@ public record ApplicationDTO(
                                 application.getId(),
                                 application.getName(),
                                 application.getIcon(),
+                                application.isActive(),
                                 application.getStores() != null ? application.getStores().stream()
                                                 .map(StoreDTO::fromEntityToDTO)
                                                 .collect(Collectors.toList()) : List.of());
