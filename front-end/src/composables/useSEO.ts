@@ -8,6 +8,7 @@ export interface SEOOptions {
   image?: string | Ref<string>
   type?: 'website' | 'article' | Ref<'website' | 'article'>
   keywords?: string | Ref<string>
+  schema?: any
 }
 
 export function useSEO(options: SEOOptions = {}) {
@@ -55,7 +56,11 @@ export function useSEO(options: SEOOptions = {}) {
       founder: {
         '@type': 'Person',
         name: 'Emmanuelle Bonoli',
-        jobTitle: 'Fullstack Developer & Game Studio Founder'
+        jobTitle: 'Fullstack Developer & Game Studio Founder',
+        sameAs: [
+          'https://github.com/EmmanuelleBonoli',
+          'https://www.linkedin.com/in/emmanuellebonoli'
+        ]
       },
       knowsAbout: [
         'Capacitor',
@@ -74,6 +79,9 @@ export function useSEO(options: SEOOptions = {}) {
 
   useHead({
     title,
+    link: [
+      { rel: 'canonical', href: `https://major-baseline.com${route.path}` }
+    ],
     meta: [
       { name: 'keywords', content: keywords },
       { name: 'author', content: 'Emmanuelle Bonoli' }
@@ -81,9 +89,15 @@ export function useSEO(options: SEOOptions = {}) {
     script: [
       structuredData.value
         ? {
-            type: 'application/ld+json',
-            innerHTML: JSON.stringify(structuredData.value)
-          }
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify(structuredData.value)
+        }
+        : {},
+      options.schema
+        ? {
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify(options.schema)
+        }
         : {}
     ]
   })

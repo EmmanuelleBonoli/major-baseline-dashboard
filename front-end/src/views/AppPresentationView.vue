@@ -148,7 +148,23 @@ const application = computed(() => {
 })
 
 useSEO({
-  title: computed(() => (application.value ? application.value.title : 'Chargement...'))
+  title: computed(() => (application.value ? application.value.title : 'Chargement...')),
+  schema: computed(() => {
+    if (!application.value) return null
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      'name': application.value.title,
+      'description': application.value.tagline,
+      'applicationCategory': application.value.category[0] || 'Game',
+      'operatingSystem': 'Mobile',
+      'author': {
+        '@type': 'Person',
+        'name': 'Emmanuelle Bonoli'
+      },
+      'keywords': application.value.techStack?.join(', ') || ''
+    }
+  })
 })
 
 watchEffect(() => {

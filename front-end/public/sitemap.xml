@@ -3,7 +3,7 @@
   <url>
     <loc>https://major-baseline.com/</loc>
     <lastmod>2026-03-14</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
@@ -16,6 +16,6 @@
     <loc>https://major-baseline.com/login</loc>
     <lastmod>2026-03-14</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.3</priority>
   </url>
 </urlset>
