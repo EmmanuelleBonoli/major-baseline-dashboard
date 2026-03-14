@@ -154,15 +154,15 @@ useSEO({
     return {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
-      'name': application.value.title,
-      'description': application.value.tagline,
-      'applicationCategory': application.value.category[0] || 'Game',
-      'operatingSystem': 'Mobile',
-      'author': {
+      name: application.value.title,
+      description: application.value.tagline,
+      applicationCategory: application.value.category[0] || 'Game',
+      operatingSystem: 'Mobile',
+      author: {
         '@type': 'Person',
-        'name': 'Emmanuelle Bonoli'
+        name: 'Emmanuelle Bonoli'
       },
-      'keywords': application.value.techStack?.join(', ') || ''
+      keywords: application.value.techStack?.join(', ') || ''
     }
   })
 })
