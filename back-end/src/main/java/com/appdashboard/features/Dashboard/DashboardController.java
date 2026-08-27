@@ -1,21 +1,19 @@
 package com.appdashboard.features.Dashboard;
 
+import com.appdashboard.features.AppStats.AppStatsService;
 import com.appdashboard.features.Application.Application;
 import com.appdashboard.features.Application.ApplicationDTO;
+import com.appdashboard.features.Application.ApplicationService;
 import com.appdashboard.features.Store.Store;
 import com.appdashboard.features.Store.StoreDTO;
+import com.appdashboard.features.Store.StoreService;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
-
-import com.appdashboard.features.Application.ApplicationService;
-import com.appdashboard.features.Store.StoreService;
-import com.appdashboard.features.AppStats.AppStatsService;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -57,9 +55,10 @@ public class DashboardController {
      */
     @GetMapping("/applications/{id}/stats")
     public ResponseEntity<AppDashboardDTO> getApplicationDashboard(
-            @PathVariable UUID id,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        @PathVariable UUID id,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
         if (startDate == null) {
             startDate = LocalDate.now().minusDays(30);
         }
@@ -89,9 +88,10 @@ public class DashboardController {
      */
     @GetMapping("/stores/{id}")
     public ResponseEntity<AppDashboardDTO> getAppDashboard(
-            @PathVariable UUID id,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        @PathVariable UUID id,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
         if (startDate == null) {
             startDate = LocalDate.now().minusDays(30);
         }
@@ -101,9 +101,6 @@ public class DashboardController {
 
         return ResponseEntity.ok(dashboardService.getAppDashboard(id, startDate, endDate));
     }
-
-
-
 
     @PostMapping("/applications/{appId}/stores")
     public ResponseEntity<StoreDTO> addStoreToApplication(@PathVariable UUID appId, @RequestBody Store store) {
@@ -118,14 +115,14 @@ public class DashboardController {
         return ResponseEntity.noContent().build();
     }
 
-
     /**
      * GET /api/dashboard/global-summary - Dashboard global agrégé
      */
     @GetMapping("/global-summary")
     public ResponseEntity<AppDashboardDTO> getGlobalSummary(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
         if (startDate == null) {
             startDate = LocalDate.now().minusDays(30);
         }

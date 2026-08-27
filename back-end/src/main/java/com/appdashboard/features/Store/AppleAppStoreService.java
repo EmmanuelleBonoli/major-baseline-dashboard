@@ -4,17 +4,16 @@ import com.appdashboard.features.AppStats.AppStats;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Service;
-
 import java.security.KeyFactory;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -22,6 +21,7 @@ public class AppleAppStoreService {
 
     @Value("${security.jwt.secret-key}")
     private String secretKey;
+
     @Value("${stores.apple.key-id}")
     private String keyId;
 
@@ -37,28 +37,26 @@ public class AppleAppStoreService {
     private String generateJWT() throws Exception {
         // Nettoyer et décoder la clé privée
         String privateKeyPEM = privateKeyContent
-                .replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "")
-                .replaceAll("\\s", "");
+            .replace("-----BEGIN PRIVATE KEY-----", "")
+            .replace("-----END PRIVATE KEY-----", "")
+            .replaceAll("\\s", "");
 
         byte[] encoded = Base64.getDecoder().decode(privateKeyPEM);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);
         KeyFactory keyFactory = KeyFactory.getInstance("EC");
-        keyFactory.generatePrivate(keySpec); 
+        keyFactory.generatePrivate(keySpec);
 
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
-                .setHeaderParam("kid", keyId)
-                .setHeaderParam("typ", "JWT")
-                .setIssuer(issuerId)
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + 1200000)) // 20 minutes
-                .setAudience("appstoreconnect-v1")
-                .signWith(
-                        Keys.hmacShaKeyFor(secretKey.getBytes()),
-                        SignatureAlgorithm.HS256)
-                .compact();
+            .setHeaderParam("kid", keyId)
+            .setHeaderParam("typ", "JWT")
+            .setIssuer(issuerId)
+            .setIssuedAt(new Date(now))
+            .setExpiration(new Date(now + 1200000)) // 20 minutes
+            .setAudience("appstoreconnect-v1")
+            .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
+            .compact();
     }
 
     /**
@@ -76,7 +74,7 @@ public class AppleAppStoreService {
      */
     public List<AppStats> fetchStats(Store store, LocalDate startDate, LocalDate endDate) {
         log.info("Fetching stats for {} from {} to {}", store.getBundleId(), startDate, endDate);
-        
+
         // Simulation pour l'instant : on redirige vers le générateur de mock centralisé
         // TODO: Implémenter le vrai appel vers App Store Connect API
         return com.appdashboard.features.AppStats.StatsMockGenerator.generateStats(store, startDate, endDate);

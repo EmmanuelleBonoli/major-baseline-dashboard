@@ -10,8 +10,8 @@ const app = createApp(App)
 
 // Gestionnaire d'erreurs global pour Firebase Analytics
 app.config.errorHandler = (err: any, _instance: any, info: string) => {
-    console.error('Vue Error:', err, info)
-    trackException(`${err.message} (${info})`, true)
+  console.error('Vue Error:', err, info)
+  trackException(`${err.message} (${info})`, true)
 }
 
 const head = createHead()

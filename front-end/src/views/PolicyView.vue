@@ -50,5 +50,4 @@ onMounted(async () => {
 .policy-view {
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
-
 </style>

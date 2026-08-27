@@ -1,19 +1,18 @@
 package com.appdashboard.features.AppStats;
 
-import com.appdashboard.features.Store.Store;
-import com.appdashboard.features.Store.StoreService;
 import com.appdashboard.features.Store.AppleAppStoreService;
 import com.appdashboard.features.Store.GooglePlayService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.appdashboard.features.Store.Store;
+import com.appdashboard.features.Store.StoreService;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -25,13 +24,14 @@ public class AppStatsService {
     private final GooglePlayService googlePlayService;
     private final AppleAppStoreService appleAppStoreService;
 
-
     @Transactional
     public void syncAllActiveStores() {
         log.info("Lancement de la synchronisation globale...");
-        List<Store> activeStores = storeService.getAllStoreEntities().stream()
-                .filter(s -> s.isActive() && s.getApplication().isActive())
-                .collect(Collectors.toList());
+        List<Store> activeStores = storeService
+            .getAllStoreEntities()
+            .stream()
+            .filter(s -> s.isActive() && s.getApplication().isActive())
+            .collect(Collectors.toList());
 
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(30);
@@ -41,7 +41,6 @@ public class AppStatsService {
         }
         log.info("Synchronisation globale terminée ({} stores synchronisés)", activeStores.size());
     }
-
 
     public List<AppStats> getGlobalStatsByDateRange(LocalDate startDate, LocalDate endDate) {
         return statsRepository.findGlobalStatsByDateRange(startDate, endDate);
@@ -65,10 +64,7 @@ public class AppStatsService {
 
         LocalDate yesterday = LocalDate.now().minusDays(1);
         if (!endDate.isBefore(yesterday)) {
-            LocalDate mostRecentDate = existingStats.stream()
-                    .map(AppStats::getDate)
-                    .max(LocalDate::compareTo)
-                    .orElse(LocalDate.MIN);
+            LocalDate mostRecentDate = existingStats.stream().map(AppStats::getDate).max(LocalDate::compareTo).orElse(LocalDate.MIN);
 
             if (mostRecentDate.isBefore(yesterday)) {
                 log.info("Les données sont obsolètes (dernière date: {})", mostRecentDate);
@@ -77,15 +73,11 @@ public class AppStatsService {
         }
 
         long requestedDays = startDate.datesUntil(endDate.plusDays(1)).count();
-        long distinctDates = existingStats.stream()
-                .map(AppStats::getDate)
-                .distinct()
-                .count();
+        long distinctDates = existingStats.stream().map(AppStats::getDate).distinct().count();
 
         double coverage = (double) distinctDates / requestedDays;
         if (coverage < 0.8) {
-            log.info("Couverture insuffisante: {}% ({}/{} jours)",
-                    Math.round(coverage * 100), distinctDates, requestedDays);
+            log.info("Couverture insuffisante: {}% ({}/{} jours)", Math.round(coverage * 100), distinctDates, requestedDays);
             return true;
         }
 
@@ -104,19 +96,20 @@ public class AppStatsService {
             }
 
             for (AppStats stat : newStats) {
-                statsRepository.findByStoreIdAndDateAndMetricType(
-                        store.getId(), stat.getDate(), stat.getMetricType()).ifPresentOrElse(
-                                existing -> {
-                                    existing.setValue(stat.getValue());
-                                    existing.setRevenueAmount(stat.getRevenueAmount());
-                                    existing.setCurrency(stat.getCurrency());
-                                    statsRepository.save(existing);
-                                },
-                                () -> statsRepository.save(stat));
+                statsRepository
+                    .findByStoreIdAndDateAndMetricType(store.getId(), stat.getDate(), stat.getMetricType())
+                    .ifPresentOrElse(
+                        existing -> {
+                            existing.setValue(stat.getValue());
+                            existing.setRevenueAmount(stat.getRevenueAmount());
+                            existing.setCurrency(stat.getCurrency());
+                            statsRepository.save(existing);
+                        },
+                        () -> statsRepository.save(stat)
+                    );
             }
 
             log.info("Récupéré et sauvegardé {} stats pour {}", newStats.size(), store.getApplication().getName());
-
         } catch (Exception e) {
             log.error("Erreur lors du fetch des données pour {}: {}", store.getApplication().getName(), e.getMessage());
         }
