@@ -5,6 +5,7 @@ import AppDashboardView from '@/views/AppDashboardView.vue'
 import LoginView from '@/views/LoginView.vue'
 import ShowcaseView from '@/views/ShowcaseView.vue'
 import ContactView from '@/views/ContactView.vue'
+import { trackPageView } from '@/services/firebase'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -50,6 +51,16 @@ const router = createRouter({
         title: 'Connexion',
         description:
           "Connexion privée au dashboard de Major Baseline, permet d'accéder aux statistiques et gérer les projets du studio."
+      }
+    },
+    {
+      path: '/policies/:projectId/:type',
+      name: 'policy',
+      component: () => import('@/views/PolicyView.vue'),
+      meta: {
+        requiresAuth: false,
+        title: 'Document Légal',
+        description: 'Document Légal (CGV ou Politique de Confidentialité) du projet sélectionné'
       }
     },
     {
@@ -124,6 +135,8 @@ router.afterEach((to) => {
       robots: 'noindex, nofollow'
     })
   }
+
+  trackPageView(to.fullPath, title)
 })
 
 router.beforeEach((to, from, next) => {

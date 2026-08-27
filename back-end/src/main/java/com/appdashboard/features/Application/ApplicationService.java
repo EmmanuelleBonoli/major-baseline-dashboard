@@ -1,27 +1,24 @@
 package com.appdashboard.features.Application;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
+import com.appdashboard.exception.ResourceNotFoundException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import com.appdashboard.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ApplicationService {
+
     private final ApplicationRepository applicationRepository;
 
     public List<ApplicationDTO> getAllGames() {
-        return applicationRepository.findAll().stream()
-                .map(ApplicationDTO::fromEntityToDTO)
-                .collect(Collectors.toList());
+        return applicationRepository.findAll().stream().map(ApplicationDTO::fromEntityToDTO).collect(Collectors.toList());
     }
 
     public Application getGameById(UUID id) {
-        return applicationRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Application introuvable"));
+        return applicationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Application introuvable"));
     }
 
     public ApplicationDTO createApplication(Application app) {

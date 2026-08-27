@@ -9,4 +9,12 @@ export interface ShowcaseApp {
   description?: string
   images?: string[] // screenshot / illustrations
   techStack?: string[] // technologies used
+  policies?: {
+    hasCGV?: boolean
+    hasPrivacyPolicy?: boolean
+  }
+  links?: {
+    github?: string[]
+    live?: string
+  }
 }
