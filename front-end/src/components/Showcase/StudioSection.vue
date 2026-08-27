@@ -7,7 +7,7 @@
         Le Studio
       </h2>
       <p class="text-[1rem] md:text-[1.3rem] text-gold mb-12 md:mb-20 tracking-[1px] md:tracking-[2px] uppercase">
-        /// Artisanat et simplicité ///
+        /// Artisanat et expérimentation ///
       </p>
 
       <div
@@ -28,14 +28,14 @@
           </h3>
           <p class="text-slate-300 text-[1.1rem] leading-relaxed mb-6">
             <strong class="text-white">Major Baseline</strong> est né de l'envie de créer des applications pratiques et
-            des jeux amusants, sans prétention mais avec passion.
+            des jeux amusants, avec passion et sans prétention.
           </p>
           <p class="text-slate-300 text-[1.1rem] leading-relaxed mb-6">
             L'objectif est de concevoir des outils utiles pour le quotidien et des jeux simples pour se divertir, en
-            privilégiant l'expérience utilisateur avant tout.
+            privilégiant l'expérience utilisateur.
           </p>
           <p class="text-slate-300 text-[1.1rem] leading-relaxed">
-            Ce studio est avant tout un espace d'expérimentation et de partage!
+            Ce studio est avant tout un espace d'expérimentation !
           </p>
         </div>
 
@@ -74,7 +74,8 @@
   </section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 <style scoped>
 .section-title {
