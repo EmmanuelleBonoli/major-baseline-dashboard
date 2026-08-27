@@ -1,22 +1,20 @@
 package com.appdashboard.features.Store;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import com.appdashboard.exception.ResourceNotFoundException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class StoreService {
+
     private final StoreRepository storeRepository;
 
     public List<StoreDTO> getAllStores() {
-        return getAllStoreEntities().stream()
-                .map(StoreDTO::fromEntityToDTO)
-                .collect(Collectors.toList());
+        return getAllStoreEntities().stream().map(StoreDTO::fromEntityToDTO).collect(Collectors.toList());
     }
 
     public List<Store> getAllStoreEntities() {
@@ -24,8 +22,7 @@ public class StoreService {
     }
 
     public Store getStoreById(UUID storeId) {
-        return storeRepository.findById(storeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Store introuvable"));
+        return storeRepository.findById(storeId).orElseThrow(() -> new ResourceNotFoundException("Store introuvable"));
     }
 
     public StoreDTO createStore(Store store) {

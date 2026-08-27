@@ -24,60 +24,59 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SecurityConfig implements WebMvcConfigurer {
 
-  @Value("${cors.allowedOrigins}")
-  private String allowedOrigins;
+    @Value("${cors.allowedOrigins}")
+    private String allowedOrigins;
 
-  private final CustomUserDetailsService customUserDetailsService;
-  private final CustomAuthEntryPoint customAuthEntryPoint;
-  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthEntryPoint customAuthEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-  private final LoginRateLimitFilter loginRateLimitFilter;
+    private final LoginRateLimitFilter loginRateLimitFilter;
 
-  public SecurityConfig(
-      CustomUserDetailsService customUserDetailsService,
-      CustomAuthEntryPoint customAuthEntryPoint,
-      JwtAuthenticationFilter jwtAuthenticationFilter,
-      LoginRateLimitFilter loginRateLimitFilter) {
-    this.customUserDetailsService = customUserDetailsService;
-    this.customAuthEntryPoint = customAuthEntryPoint;
-    this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    this.loginRateLimitFilter = loginRateLimitFilter;
-  }
+    public SecurityConfig(
+        CustomUserDetailsService customUserDetailsService,
+        CustomAuthEntryPoint customAuthEntryPoint,
+        JwtAuthenticationFilter jwtAuthenticationFilter,
+        LoginRateLimitFilter loginRateLimitFilter
+    ) {
+        this.customUserDetailsService = customUserDetailsService;
+        this.customAuthEntryPoint = customAuthEntryPoint;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.loginRateLimitFilter = loginRateLimitFilter;
+    }
 
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(
-            auth -> auth.requestMatchers(PUBLIC_URLS.toArray(new String[0])).permitAll().anyRequest().authenticated())
-        .userDetailsService(customUserDetailsService)
-        .exceptionHandling(e -> e.authenticationEntryPoint(customAuthEntryPoint))
-        .addFilterBefore(loginRateLimitFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-    return http.build();
-  }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_URLS.toArray(new String[0])).permitAll().anyRequest().authenticated())
+            .userDetailsService(customUserDetailsService)
+            .exceptionHandling(e -> e.authenticationEntryPoint(customAuthEntryPoint))
+            .addFilterBefore(loginRateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
+    }
 
-  @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-      throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  UrlBasedCorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Collections.singletonList(allowedOrigins));
-    configuration.addAllowedHeader("Content-Type");
-    configuration.addAllowedHeader("Authorization");
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "HEAD", "OPTIONS"));
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
+    @Bean
+    UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Collections.singletonList(allowedOrigins));
+        configuration.addAllowedHeader("Content-Type");
+        configuration.addAllowedHeader("Authorization");
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "HEAD", "OPTIONS"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }

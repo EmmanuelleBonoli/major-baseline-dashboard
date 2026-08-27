@@ -3,17 +3,15 @@ package com.appdashboard.features.AppStats;
 import com.appdashboard.core.BaseEntity;
 import com.appdashboard.features.Store.Store;
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "app_stats", uniqueConstraints = @UniqueConstraint(columnNames = { "store_id", "date",
-        "metric_type" }))
+@Table(name = "app_stats", uniqueConstraints = @UniqueConstraint(columnNames = { "store_id", "date", "metric_type" }))
 public class AppStats extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -52,5 +50,4 @@ public class AppStats extends BaseEntity {
         RATINGS,
         REVIEWS
     }
-
 }

@@ -20,7 +20,7 @@
         <a
           href="#projects"
           class="btn-glitch teal flex-1 min-w-[140px] max-w-[200px] md:max-w-none relative py-3 md:py-6 px-4 md:px-16 bg-transparent no-underline border-[2px] md:border-[3px] font-black text-[0.85rem] md:text-[1.1rem] tracking-[1px] md:tracking-[3px] uppercase overflow-hidden transition-all duration-300"
-          >Nos Projets</a
+          >Voir les Projets</a
         >
         <a
           href="#studio"

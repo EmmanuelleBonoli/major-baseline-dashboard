@@ -9,7 +9,13 @@
       <div
         class="card-header w-full h-[200px] md:h-[300px] flex items-center justify-center text-[4rem] md:text-[6rem] relative overflow-hidden shrink-0"
       >
-        <span class="card-icon relative z-[2]">{{ application.icon }}</span>
+        <img
+          v-if="application.images?.[0]"
+          :src="application.images[0]"
+          :alt="application.title"
+          class="card-image absolute inset-0 w-full h-full object-contain z-[1]"
+        />
+        <span v-else class="card-icon relative z-[2]">{{ application.icon }}</span>
       </div>
 
       <div class="p-6 sm:p-8 md:p-10 bg-black/80 flex-1 flex flex-col">
@@ -105,6 +111,13 @@ defineProps<{
 }
 .app-card:hover .card-icon {
   filter: drop-shadow(0 0 30px var(--color-gold));
+}
+
+.card-image {
+  transition: transform 0.5s ease;
+}
+.app-card:hover .card-image {
+  transform: scale(1.08);
 }
 
 .pulse-indicator {

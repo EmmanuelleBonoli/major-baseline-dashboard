@@ -1,6 +1,5 @@
-import { cyberNexus } from './cyberNexus'
-import { aetherProtocol } from './aetherProtocol'
-import { voidRunners } from './voidRunners'
+import { astroPuyo } from './astroPuyo'
+import { wordRiders } from './wordRiders'
 
-export const games = [cyberNexus, aetherProtocol, voidRunners]
+export const games = [astroPuyo, wordRiders]
 export const gamesMap = Object.fromEntries(games.map((g) => [g.id, g]))

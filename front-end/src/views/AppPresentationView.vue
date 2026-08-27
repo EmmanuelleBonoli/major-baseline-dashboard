@@ -21,7 +21,13 @@
       <div
         class="banner-container relative w-full h-[200px] md:h-[400px] border-y sm:border-x md:border-2 border-teal/50 overflow-hidden mb-8 md:mb-16 flex items-center justify-center"
       >
-        <div class="banner-icon text-[5rem] sm:text-[6rem] md:text-[12rem] z-10">
+        <img
+          v-if="application.images?.[0]"
+          :src="application.images[0]"
+          :alt="application.title"
+          class="banner-image absolute inset-0 w-full h-full object-contain z-[1]"
+        />
+        <div v-else class="banner-icon text-[5rem] sm:text-[6rem] md:text-[12rem] z-10">
           {{ application.icon }}
         </div>
       </div>
@@ -109,6 +115,69 @@
             >
             <span class="text-[0.9rem] md:text-lg font-black text-white group-hover:text-gold">{{ tech }}</span>
           </div>
+        </div>
+      </div>
+
+      <div
+        v-if="application.policies && (application.policies.hasPrivacyPolicy || application.policies.hasCGV)"
+        class="description-card w-full p-6 sm:p-8 md:p-10 bg-black/60 border-y sm:border-x border-teal/30 backdrop-blur-md mb-10 md:mb-16 relative"
+      >
+        <h2
+          class="text-lg md:text-2xl font-bold tracking-[1px] md:tracking-[3px] text-teal uppercase mb-4 md:mb-6 flex items-center gap-4"
+        >
+          <span class="w-4 md:w-8 h-[2px] bg-teal shrink-0"></span> Documents Légaux
+          <span class="w-full h-[1px] bg-gradient-to-r from-teal/20 to-transparent flex-1"></span>
+        </h2>
+        <div class="flex flex-wrap gap-4 mt-6">
+          <router-link
+            v-if="application.policies.hasPrivacyPolicy"
+            :to="`/policies/${application.id}/privacy`"
+            target="_blank"
+            class="inline-flex items-center gap-3 px-6 py-3 border border-teal text-teal hover:bg-teal hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
+          >
+            <i class="fas fa-shield-alt"></i> Politique de Confidentialité
+          </router-link>
+          <router-link
+            v-if="application.policies.hasCGV"
+            :to="`/policies/${application.id}/sales`"
+            target="_blank"
+            class="inline-flex items-center gap-3 px-6 py-3 border border-teal text-teal hover:bg-teal hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
+          >
+            <i class="fas fa-file-contract"></i> CGV / Conditions d'utilisation
+          </router-link>
+        </div>
+      </div>
+
+      <div
+        v-if="application.links && (application.links.github?.length || application.links.live)"
+        class="description-card w-full p-6 sm:p-8 md:p-10 bg-black/60 border-y sm:border-x border-gold/30 backdrop-blur-md mb-10 md:mb-16 relative"
+      >
+        <h2
+          class="text-lg md:text-2xl font-bold tracking-[1px] md:tracking-[3px] text-gold uppercase mb-4 md:mb-6 flex items-center gap-4"
+        >
+          <span class="w-4 md:w-8 h-[2px] bg-gold shrink-0"></span> Liens
+          <span class="w-full h-[1px] bg-gradient-to-r from-gold/20 to-transparent flex-1"></span>
+        </h2>
+        <div class="flex flex-wrap gap-4 mt-6">
+          <a
+            v-if="application.links.live"
+            :href="application.links.live"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-3 px-6 py-3 border border-gold text-gold hover:bg-gold hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
+          >
+            <i class="fas fa-external-link-alt"></i> Voir le site
+          </a>
+          <a
+            v-for="(repo, index) in application.links.github"
+            :key="repo"
+            :href="repo"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-3 px-6 py-3 border border-gold text-gold hover:bg-gold hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
+          >
+            <i class="fab fa-github"></i> GitHub{{ application.links.github!.length > 1 ? ` (${index + 1})` : '' }}
+          </a>
         </div>
       </div>
     </div>
@@ -232,6 +301,10 @@ watchEffect(() => {
 .banner-icon {
   animation: float 4s ease-in-out infinite;
   filter: drop-shadow(0 0 20px color-mix(in srgb, var(--color-gold) 80%, transparent));
+}
+
+.banner-image {
+  filter: brightness(0.85);
 }
 @media (min-width: 768px) {
   .banner-icon {
