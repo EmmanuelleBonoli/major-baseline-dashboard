@@ -94,18 +94,20 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
+          # Port SSH du VPS (durci hors du 22). Secret dédié.
+          SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
-          scp -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes docker-compose.prod.yml \
-            "$SSH_USER@$SSH_HOST:/home/ubuntu/major-baseline/docker-compose.prod.yml"
+          scp -P "$SSH_PORT" -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes docker-compose.prod.yml \
+            "$SSH_USER@$SSH_HOST:major-baseline/docker-compose.prod.yml"
 
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes "$SSH_USER@$SSH_HOST" \
-            "cd /home/ubuntu/major-baseline \
+          ssh -p "$SSH_PORT" -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes "$SSH_USER@$SSH_HOST" \
+            "cd ~/major-baseline \
              && export IMAGE_TAG='$IMAGE_TAG' \
              && docker compose --env-file .env -f docker-compose.prod.yml pull \
              && docker compose --env-file .env -f docker-compose.prod.yml up -d --remove-orphans \
