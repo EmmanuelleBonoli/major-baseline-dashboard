@@ -8,7 +8,7 @@ import { buildPublicRoutes, buildSitemapXml, buildRobotsTxt } from './src/conten
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
-  const siteUrl = (env.VITE_SITE_URL || 'https://major-baseline.com').replace(/\/+$/, '')
+  const siteUrl = (env.VITE_SITE_URL || 'https://major-baseline.fr').replace(/\/+$/, '')
 
   return {
     plugins: [

@@ -1,0 +1,23 @@
+# Dépendances et artefacts de build (réinstallés / régénérés dans l'image)
+node_modules
+dist
+.vite
+
+# NE PAS ignorer .env : il sert d'entrée au build (Firebase, VITE_SITE_URL)
+# pour `npm run docker:dev` ; la CI en génère un avant `docker build`.
+
+# Git / CI / IDE
+.git
+.github
+.idea
+.vscode
+
+# Docker (inutile dans le contexte de build)
+Dockerfile
+.dockerignore
+
+# Divers
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db

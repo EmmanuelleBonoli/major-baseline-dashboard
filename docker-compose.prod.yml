@@ -1,0 +1,101 @@
+# Compose de production autonome — Major Baseline.
+#
+# Utilisé par la CI (.github/workflows/deploy.yml). Sur le VPS :
+#   cd /home/ubuntu/major-baseline
+#   docker compose --env-file .env -f docker-compose.prod.yml pull
+#   docker compose --env-file .env -f docker-compose.prod.yml up -d --remove-orphans
+#
+# Aucun build ici : les images viennent de ghcr.io.
+# Prérequis VPS :
+#   - réseau Docker externe `traefik` (fourni par la stack Traefik existante)
+#   - un fichier .env à côté de ce fichier (gabarit : back-end/.env.production.sample)
+
+name: ${COMPOSE_PROJECT_NAME:-major-baseline}
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    # Empreinte mémoire réduite : VPS partagé avec d'autres projets.
+    command:
+      - --innodb-buffer-pool-size=128M
+      - --skip-name-resolve
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD_PROD}
+      MYSQL_DATABASE: ${DB_NAME_PROD}
+      MYSQL_USER: ${DB_USER_PROD}
+      MYSQL_PASSWORD: ${DB_PASSWORD_PROD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -u root -p"$$MYSQL_ROOT_PASSWORD" --silent']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  backend:
+    image: ghcr.io/emmanuellebonoli/gsd-backend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: production
+      DB_HOST_PROD: mysql
+      DB_PORT_PROD: 3306
+      # JVM contenue : ~200-300 Mo résident pour ce service.
+      JAVA_TOOL_OPTIONS: '-XX:MaxRAMPercentage=25 -XX:+UseSerialGC -Xss512k'
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - internal
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  frontend:
+    image: ghcr.io/emmanuellebonoli/gsd-frontend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - traefik
+      - internal
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      # Routeur principal (apex)
+      - traefik.http.routers.major-baseline.rule=Host(`${APP_HOST}`)
+      - traefik.http.routers.major-baseline.entrypoints=websecure
+      - traefik.http.routers.major-baseline.tls.certresolver=letsencrypt
+      - traefik.http.services.major-baseline.loadbalancer.server.port=80
+      # Redirection 301 www -> apex
+      - traefik.http.routers.major-baseline-www.rule=Host(`www.${APP_HOST}`)
+      - traefik.http.routers.major-baseline-www.entrypoints=websecure
+      - traefik.http.routers.major-baseline-www.tls.certresolver=letsencrypt
+      - traefik.http.routers.major-baseline-www.middlewares=major-baseline-wwwredirect
+      - traefik.http.middlewares.major-baseline-wwwredirect.redirectregex.regex=^https?://www\.(.+)
+      - traefik.http.middlewares.major-baseline-wwwredirect.redirectregex.replacement=https://$${1}
+      - traefik.http.middlewares.major-baseline-wwwredirect.redirectregex.permanent=true
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
+volumes:
+  mysql-data:
+
+networks:
+  # Réseau partagé avec Traefik (déjà créé sur le VPS).
+  traefik:
+    external: true
+  # Réseau privé front <-> back <-> mysql, non exposé.
+  internal:
+    driver: bridge
