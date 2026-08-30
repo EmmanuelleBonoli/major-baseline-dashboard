@@ -50,6 +50,10 @@ const go = (page: number) => {
 </script>
 
 <style scoped>
+.pagination-btn {
+  cursor: pointer;
+}
+
 .pagination-btn:not(.active):not(:disabled):hover {
   background-color: color-mix(in srgb, var(--color-teal) 10%, transparent);
 }
