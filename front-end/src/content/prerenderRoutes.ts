@@ -7,7 +7,7 @@
  * src/content/games.
  */
 
-export const PROJECT_IDS = ['moodflow', 'alasso', 'astroPuyo', 'wordRiders'] as const
+export const PROJECT_IDS = ['moodflow', 'alasso', 'writer', 'astroPuyo', 'wordRiders'] as const
 
 export const STATIC_PUBLIC_ROUTES = ['/', '/contact', '/mentions-legales', '/confidentialite'] as const
 

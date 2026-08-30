@@ -5,7 +5,8 @@ export const moodflow: ShowcaseApp = {
   title: 'Moodflow',
   icon: '🧠',
   tagline: "Génère un planning personnalisé en fonction de votre humeur grâce à l'IA",
-  status: 'Disponible',
+  status: 'en développement',
+  order: 4,
   category: ['Productivité', 'IA'],
   description: `
 Application type todolist qui génère un planning personnalisé des tâches

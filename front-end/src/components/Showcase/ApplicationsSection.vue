@@ -37,6 +37,12 @@ const currentPage = ref(1)
 
 const sortItems = (items: ShowcaseApp[]) => {
   return [...items].sort((a, b) => {
+    // Ordre manuel prioritaire (croissant) ; les projets sans `order` passent après.
+    const orderA = a.order ?? Number.POSITIVE_INFINITY
+    const orderB = b.order ?? Number.POSITIVE_INFINITY
+    if (orderA !== orderB) return orderA - orderB
+
+    // Repli quand aucun ordre manuel n'est défini : le plus récent d'abord.
     if (!a.publishDate && !b.publishDate) return 0
     if (!a.publishDate) return -1
     if (!b.publishDate) return 1
