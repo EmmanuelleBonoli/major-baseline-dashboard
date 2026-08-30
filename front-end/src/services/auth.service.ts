@@ -1,9 +1,13 @@
 import { api } from './api'
 import { reactive } from 'vue'
 
+// `localStorage` est indisponible pendant le pré-rendu SSG (contexte Node) :
+// ce module est tiré dans le graphe via App.vue -> DashboardLayout.
+const hasStorage = typeof localStorage !== 'undefined'
+
 export const authState = reactive({
-  user: JSON.parse(localStorage.getItem('majorBaselineUser') || 'null'),
-  isAuthenticated: !!localStorage.getItem('majorBaselineToken')
+  user: hasStorage ? JSON.parse(localStorage.getItem('majorBaselineUser') || 'null') : null,
+  isAuthenticated: hasStorage && !!localStorage.getItem('majorBaselineToken')
 })
 
 export const authService = {

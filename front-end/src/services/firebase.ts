@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getAnalytics, logEvent } from 'firebase/analytics'
+import { getAnalytics, logEvent, type Analytics } from 'firebase/analytics'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,10 +14,45 @@ const firebaseConfig = {
 // Initialisation de Firebase
 const app = initializeApp(firebaseConfig)
 
-// Initialisation de l'analytique seulement si nous sommes en production ou si measurementId est fourni
-let analytics: any = null
-if (typeof window !== 'undefined' && firebaseConfig.measurementId) {
+// L'analytique n'est JAMAIS initialisée au chargement : elle attend le
+// consentement explicite de l'utilisateur (RGPD / recommandations CNIL).
+// Tant que `analytics` vaut null, toutes les fonctions de suivi sont inertes.
+let analytics: Analytics | null = null
+
+// Nom du drapeau d'opt-out officiel de Google Analytics pour ce flux.
+const gaDisableFlag = `ga-disable-${firebaseConfig.measurementId}`
+
+/**
+ * Active Google Analytics après recueil du consentement.
+ * Idempotent : sans effet si déjà actif, hors navigateur ou sans measurementId.
+ */
+export const enableAnalytics = (): void => {
+  if (analytics) return
+  if (typeof window === 'undefined' || !firebaseConfig.measurementId)
+    return // Lève un éventuel opt-out posé par un refus précédent dans la même session.
+  ;(window as unknown as Record<string, boolean>)[gaDisableFlag] = false
   analytics = getAnalytics(app)
+
+  // Vue de page initiale : l'utilisateur a consenti après le chargement,
+  // le guard de router ne rejouera pas la navigation courante.
+  if (typeof document !== 'undefined') {
+    logEvent(analytics, 'page_view', {
+      page_path: window.location.pathname + window.location.search,
+      page_title: document.title
+    })
+  }
+}
+
+/**
+ * Désactive Google Analytics (refus initial ou changement de choix).
+ * Un GA déjà chargé ne peut être totalement retiré du runtime : on neutralise
+ * les envois via le drapeau `ga-disable-<measurementId>` et on repasse
+ * `analytics` à null pour rendre les fonctions de suivi inertes.
+ */
+export const disableAnalytics = (): void => {
+  analytics = null
+  if (typeof window === 'undefined' || !firebaseConfig.measurementId) return
+  ;(window as unknown as Record<string, boolean>)[gaDisableFlag] = true
 }
 
 /**

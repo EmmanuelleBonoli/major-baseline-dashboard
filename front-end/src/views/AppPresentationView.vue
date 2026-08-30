@@ -25,6 +25,8 @@
           v-if="application.images?.[0]"
           :src="application.images[0]"
           :alt="application.title"
+          fetchpriority="high"
+          decoding="async"
           class="banner-image absolute inset-0 w-full h-full object-contain z-[1]"
         />
         <div v-else class="banner-icon text-[5rem] sm:text-[6rem] md:text-[12rem] z-10">
@@ -135,7 +137,7 @@
             target="_blank"
             class="inline-flex items-center gap-3 px-6 py-3 border border-teal text-teal hover:bg-teal hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
           >
-            <i class="fas fa-shield-alt"></i> Politique de Confidentialité
+            <ShieldCheck :size="16" class="shrink-0" /> Politique de Confidentialité
           </router-link>
           <router-link
             v-if="application.policies.hasCGV"
@@ -143,7 +145,7 @@
             target="_blank"
             class="inline-flex items-center gap-3 px-6 py-3 border border-teal text-teal hover:bg-teal hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
           >
-            <i class="fas fa-file-contract"></i> CGV / Conditions d'utilisation
+            <FileText :size="16" class="shrink-0" /> CGV / Conditions d'utilisation
           </router-link>
         </div>
       </div>
@@ -166,7 +168,7 @@
             rel="noopener noreferrer"
             class="inline-flex items-center gap-3 px-6 py-3 border border-gold text-gold hover:bg-gold hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
           >
-            <i class="fas fa-external-link-alt"></i> Voir le site
+            <ExternalLink :size="16" class="shrink-0" /> Voir le site
           </a>
           <a
             v-for="(repo, index) in application.links.github"
@@ -176,7 +178,9 @@
             rel="noopener noreferrer"
             class="inline-flex items-center gap-3 px-6 py-3 border border-gold text-gold hover:bg-gold hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
           >
-            <i class="fab fa-github"></i> GitHub{{ application.links.github!.length > 1 ? ` (${index + 1})` : '' }}
+            <Github :size="16" class="shrink-0" /> GitHub{{
+              application.links.github!.length > 1 ? ` (${index + 1})` : ''
+            }}
           </a>
         </div>
       </div>
@@ -203,8 +207,9 @@ import { computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { gamesMap } from '@/content/games/index'
 import { applicationsMap } from '@/content/applications/index'
+import { ShieldCheck, FileText, ExternalLink, Github } from 'lucide-vue-next'
 import { useParticles } from '@/composables/useParticles'
-import { useSEO } from '@/composables/useSEO'
+import { useSEO, toAbsoluteUrl } from '@/composables/useSEO'
 import FooterSection from '@/components/Showcase/FooterSection.vue'
 
 useParticles()
@@ -218,25 +223,57 @@ const application = computed(() => {
 
 useSEO({
   title: computed(() => (application.value ? application.value.title : 'Chargement...')),
+  description: computed(() => {
+    const app = application.value
+    // '' -> useSEO retombe sur la description de route puis la description par défaut.
+    if (!app) return ''
+    return `${app.title} — ${app.tagline.trim()}${app.techStack?.length ? ` (${app.techStack.join(', ')})` : ''}`
+  }),
   schema: computed(() => {
-    if (!application.value) return null
+    const app = application.value
+    if (!app) return null
+
+    const publisher = { '@type': 'Organization', name: 'Major Baseline', url: toAbsoluteUrl('/') }
+
+    const softwareApplication: Record<string, unknown> = {
+      '@type': 'SoftwareApplication',
+      name: app.title,
+      description: app.tagline,
+      applicationCategory: app.category[0] || 'Game',
+      operatingSystem: 'Mobile',
+      url: toAbsoluteUrl(route.path),
+      author: publisher,
+      publisher,
+      keywords: app.techStack?.join(', ') || ''
+    }
+
+    // Champs optionnels : ajoutés uniquement si renseignés dans src/content.
+    if (app.images?.length) {
+      softwareApplication.image = toAbsoluteUrl(app.images[0])
+    }
+    if (app.publishDate) {
+      softwareApplication.datePublished = app.publishDate
+    }
+
     return {
       '@context': 'https://schema.org',
-      '@type': 'SoftwareApplication',
-      name: application.value.title,
-      description: application.value.tagline,
-      applicationCategory: application.value.category[0] || 'Game',
-      operatingSystem: 'Mobile',
-      author: {
-        '@type': 'Person',
-        name: 'Emmanuelle Bonoli'
-      },
-      keywords: application.value.techStack?.join(', ') || ''
+      '@graph': [
+        softwareApplication,
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Accueil', item: toAbsoluteUrl('/') },
+            { '@type': 'ListItem', position: 2, name: app.title, item: toAbsoluteUrl(route.path) }
+          ]
+        }
+      ]
     }
   })
 })
 
 watchEffect(() => {
+  // Pas de `window` pendant le pré-rendu SSG.
+  if (import.meta.env.SSR) return
   window.scrollTo(0, 0)
 })
 </script>

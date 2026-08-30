@@ -5,6 +5,7 @@ export interface ShowcaseApp {
   icon: string
   category: string[]
   status: string
+  order?: number // ordre d'affichage manuel dans la liste des projets (croissant)
   publishDate?: string // YYYY-MM-DD
   description?: string
   images?: string[] // screenshot / illustrations

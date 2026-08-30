@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-Allow: /contact
-Allow: /login
-Disallow: /dashboard/
-
-Sitemap: https://major-baseline.com/sitemap.xml

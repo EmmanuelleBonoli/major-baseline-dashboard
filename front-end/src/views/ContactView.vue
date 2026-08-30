@@ -61,6 +61,14 @@
               <span>{{ isLoading ? 'Envoi en cours...' : 'Envoyer la requête' }}</span>
             </AppButton>
           </div>
+
+          <p class="text-slate-custom/80 text-[0.7rem] md:text-[0.75rem] leading-relaxed mt-5">
+            Les informations transmises via ce formulaire servent uniquement à traiter votre demande et ne sont pas
+            enregistrées dans une base de données.
+            <router-link to="/confidentialite" class="text-gold underline underline-offset-2 hover:text-gold-soft">
+              Politique de confidentialité </router-link
+            >.
+          </p>
         </form>
       </div>
     </div>
@@ -74,12 +82,14 @@ import { ref, reactive } from 'vue'
 import { contactApi } from '@/services/contact.service'
 import { toast } from '@/composables/useToast'
 import { useParticles } from '@/composables/useParticles'
+import { useSEO } from '@/composables/useSEO'
 import AppInput from '@/components/Showcase/ui/AppInput.vue'
 import AppButton from '@/components/Showcase/ui/AppButton.vue'
 import HeaderSection from '@/components/Showcase/HeaderSection.vue'
 import FooterSection from '@/components/Showcase/FooterSection.vue'
 
 useParticles()
+useSEO()
 
 const email = ref('')
 const subject = ref('')

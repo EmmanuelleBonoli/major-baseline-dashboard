@@ -31,10 +31,11 @@ custom:
   client-url: ${CLIENT_URL_DEV}
   contact-email: ${CONTACT_EMAIL_DESTINATION}
 
+# Identifiants stores optionnels (services Store en mock) : défaut vide.
 stores:
   google-play:
-    service-account-json: ${GOOGLE_PLAY_SERVICE_ACCOUNT}
+    service-account-json: ${GOOGLE_PLAY_SERVICE_ACCOUNT:}
   apple:
-    key-id: ${APPLE_KEY_ID}
-    issuer-id: ${APPLE_ISSUER_ID}
-    private-key: ${APPLE_PRIVATE_KEY}
+    key-id: ${APPLE_KEY_ID:}
+    issuer-id: ${APPLE_ISSUER_ID:}
+    private-key: ${APPLE_PRIVATE_KEY:}

@@ -22,5 +22,8 @@
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  // Ce module est un utilitaire de build (chargé par vite.config.ts) : il
+  // appartient au projet tsconfig.node.json, pas au projet applicatif.
+  "exclude": ["src/content/prerenderRoutes.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

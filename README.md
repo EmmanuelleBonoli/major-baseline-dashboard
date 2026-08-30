@@ -72,3 +72,23 @@ npm run prettier
 Le pipeline GitHub Actions (`.github/workflows/main.yml`) s'exécute sur chaque PR et vérifie l'ensemble du projet (back + front).
 
 Les branches suivent le flux : `feature/*` → `development` → `staging` → `main`
+
+## Déploiement
+
+| Branche | Environnement | URL |
+|---|---|---|
+| `main` | Production (VPS OVH) | https://major-baseline.fr |
+| `staging` | Intégration — CI seule, **pas de déploiement en ligne** | — |
+
+**Mécanisme.** À chaque merge sur `main`, `.github/workflows/deploy.yml` :
+
+1. construit les images `front-end` et `back-end` et les pousse sur `ghcr.io/emmanuellebonoli/gsd-{frontend,backend}` (`:latest` + `:sha-court`) ;
+2. copie `docker-compose.prod.yml` sur le VPS puis `docker compose pull && up -d`.
+
+Le VPS ne build rien : il tire les images prêtes. Traefik (déjà en place sur la machine) assure le TLS Let's Encrypt et le routage par `Host`.
+
+**Prérequis VPS** (`/home/ubuntu/major-baseline/`) : un fichier `.env` (gabarit : [`.env.production.sample`](.env.production.sample), `chmod 600`), le réseau Docker externe `traefik`, et `docker login ghcr.io` (PAT `read:packages`).
+
+**Secrets GitHub requis** : `SSH_HOST`, `SSH_USER`, `SSH_KEY` (paire dédiée au déploiement) et les `VITE_FIREBASE_*` (config web Firebase, publique).
+
+**Rollback** : sur le VPS, `IMAGE_TAG=sha-<ancien> docker compose --env-file .env -f docker-compose.prod.yml up -d`.
