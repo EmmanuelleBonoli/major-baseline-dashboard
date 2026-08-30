@@ -10,16 +10,40 @@
       <span class="md:before:content-['\00a0-\00a0']">Tous droits réservés</span>
     </p>
 
-    <!-- <div class="flex flex-wrap justify-center gap-4 md:gap-8 mt-6 flex-row">
-      <a v-for="icon in icons" :key="icon" href="#" class="w-[50px] h-[50px] md:w-[60px] md:h-[60px] border-2 border-teal flex items-center justify-center no-underline text-teal text-[1.4rem] md:text-[1.8rem] transition-all duration-300 [clip-path:polygon(30%_0%,70%_0%,100%_30%,100%_70%,70%_100%,30%_100%,0%_70%,0%_30%)] hover:bg-teal hover:text-black hover:shadow-[0_0_30px_#1a8b9d] hover:rotate-[45deg] hover:scale-110">
-        {{ icon }}
-      </a>
-    </div> -->
+    <nav
+      class="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-slate-custom text-[0.7rem] md:text-[0.8rem] tracking-[1px] uppercase"
+      aria-label="Liens légaux"
+    >
+      <RouterLink to="/mentions-legales" class="footer-link">Mentions légales</RouterLink>
+      <span class="opacity-40" aria-hidden="true">/</span>
+      <RouterLink to="/confidentialite" class="footer-link">Politique de confidentialité</RouterLink>
+      <span class="opacity-40" aria-hidden="true">/</span>
+      <button type="button" class="footer-link" @click="openBanner">Gérer les cookies</button>
+    </nav>
   </footer>
 </template>
 
 <script setup lang="ts">
-// const icons = ['𝕏', '💬', '▶', '📺']
+import { RouterLink } from 'vue-router'
+import { useConsent } from '@/composables/useConsent'
+
+const { openBanner } = useConsent()
 </script>
 
-<style scoped></style>
+<style scoped>
+.footer-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+
+.footer-link:hover {
+  color: var(--color-teal);
+}
+</style>

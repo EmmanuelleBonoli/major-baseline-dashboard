@@ -61,6 +61,14 @@
               <span>{{ isLoading ? 'Envoi en cours...' : 'Envoyer la requête' }}</span>
             </AppButton>
           </div>
+
+          <p class="text-slate-custom/80 text-[0.7rem] md:text-[0.75rem] leading-relaxed mt-5">
+            Les informations transmises via ce formulaire servent uniquement à traiter votre demande et ne sont pas
+            enregistrées dans une base de données.
+            <router-link to="/confidentialite" class="text-gold underline underline-offset-2 hover:text-gold-soft">
+              Politique de confidentialité </router-link
+            >.
+          </p>
         </form>
       </div>
     </div>

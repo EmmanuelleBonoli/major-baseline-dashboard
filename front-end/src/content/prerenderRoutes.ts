@@ -9,7 +9,7 @@
 
 export const PROJECT_IDS = ['moodflow', 'alasso', 'astroPuyo', 'wordRiders'] as const
 
-export const STATIC_PUBLIC_ROUTES = ['/', '/contact'] as const
+export const STATIC_PUBLIC_ROUTES = ['/', '/contact', '/mentions-legales', '/confidentialite'] as const
 
 /** Toutes les routes publiques indexables, au format chemin absolu. */
 export function buildPublicRoutes(): string[] {

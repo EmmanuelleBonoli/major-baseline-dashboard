@@ -55,6 +55,27 @@ export const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/mentions-legales',
+    name: 'legal-notice',
+    component: () => import('@/views/LegalNoticeView.vue'),
+    meta: {
+      requiresAuth: false,
+      title: 'Mentions légales',
+      description: 'Mentions légales du site Major Baseline : éditeur, directeur de publication, hébergeur.'
+    }
+  },
+  {
+    path: '/confidentialite',
+    name: 'privacy',
+    component: () => import('@/views/PrivacyView.vue'),
+    meta: {
+      requiresAuth: false,
+      title: 'Politique de confidentialité',
+      description:
+        'Politique de confidentialité du site Major Baseline : données collectées, cookies, base légale et exercice de vos droits.'
+    }
+  },
+  {
     path: '/policies/:projectId/:type',
     name: 'policy',
     component: () => import('@/views/PolicyView.vue'),
