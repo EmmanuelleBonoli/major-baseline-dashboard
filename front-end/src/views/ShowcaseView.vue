@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import { useParticles } from '../composables/useParticles.ts'
+import { useSEO } from '../composables/useSEO.ts'
 import HeaderSection from '../components/Showcase/HeaderSection.vue'
 import HeroSection from '../components/Showcase/HeroSection.vue'
 import ApplicationsSection from '../components/Showcase/ApplicationsSection.vue'
@@ -22,6 +23,7 @@ import StudioSection from '../components/Showcase/StudioSection.vue'
 import FooterSection from '../components/Showcase/FooterSection.vue'
 
 useParticles()
+useSEO()
 </script>
 
 <style scoped>

@@ -1,23 +1,32 @@
-import { createApp } from 'vue'
+import { ViteSSG } from 'vite-ssg'
 import { createPinia } from 'pinia'
-import { createHead } from '@unhead/vue/client'
 import App from './App.vue'
+
+// Polices auto-hébergées
+// Importées avant style.css pour que le bundler les résolve avant les @font-face du thème.
+import '@fontsource-variable/inter/wght.css'
+import '@fontsource-variable/space-grotesk/wght.css'
+import '@fontsource/rajdhani/latin-300.css'
+import '@fontsource/rajdhani/latin-400.css'
+import '@fontsource/rajdhani/latin-500.css'
+import '@fontsource/rajdhani/latin-600.css'
+import '@fontsource/rajdhani/latin-700.css'
+
 import './style.css'
-import router from './router'
+import { routes, scrollBehavior, registerRouterGuards } from './router'
 import { trackException } from './services/firebase'
 
-const app = createApp(App)
+// Entrée compatible pré-rendu : vite-ssg crée l'app, le router et le head,
+// puis exécute ce callback aussi bien au build (SSG) que côté client.
+export const createApp = ViteSSG(App, { routes, scrollBehavior }, ({ app, router }) => {
+  app.use(createPinia())
+  registerRouterGuards(router)
 
-// Gestionnaire d'erreurs global pour Firebase Analytics
-app.config.errorHandler = (err: any, _instance: any, info: string) => {
-  console.error('Vue Error:', err, info)
-  trackException(`${err.message} (${info})`, true)
-}
-
-const head = createHead()
-const pinia = createPinia()
-
-app.use(head)
-app.use(pinia)
-app.use(router)
-app.mount('#app')
+  // Gestionnaire d'erreurs global (Firebase Analytics) : client uniquement.
+  if (!import.meta.env.SSR) {
+    app.config.errorHandler = (err: any, _instance: any, info: string) => {
+      console.error('Vue Error:', err, info)
+      trackException(`${err.message} (${info})`, true)
+    }
+  }
+})

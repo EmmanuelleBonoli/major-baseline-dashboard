@@ -10,7 +10,7 @@ export const astroPuyo: ShowcaseApp = {
   description: `
 Jeu mobile du style Puyo Puyo.
   `,
-  images: ['/images/astro-puyo.png'],
+  images: ['/images/astro-puyo.webp'],
   techStack: ['Vue.js', 'Typescript', 'Spring', 'Java', 'Hibernate', 'Capacitor', 'Docker', 'CI/CD'],
   links: {
     github: [

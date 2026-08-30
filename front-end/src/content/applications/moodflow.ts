@@ -11,7 +11,7 @@ export const moodflow: ShowcaseApp = {
 Application type todolist qui génère un planning personnalisé des tâches
 en fonction de l'humeur de l'utilisateur grâce à l'IA.
   `,
-  images: ['/images/moodflow.png'],
+  images: ['/images/moodflow.webp'],
   techStack: ['Next.js', 'Typescript', 'Nest.js', 'Prisma', 'IA', 'Docker', 'CI/CD'],
   links: {
     github: ['https://github.com/EmmanuelleBonoli/Moodflow']

@@ -74,12 +74,14 @@ import { ref, reactive } from 'vue'
 import { contactApi } from '@/services/contact.service'
 import { toast } from '@/composables/useToast'
 import { useParticles } from '@/composables/useParticles'
+import { useSEO } from '@/composables/useSEO'
 import AppInput from '@/components/Showcase/ui/AppInput.vue'
 import AppButton from '@/components/Showcase/ui/AppButton.vue'
 import HeaderSection from '@/components/Showcase/HeaderSection.vue'
 import FooterSection from '@/components/Showcase/FooterSection.vue'
 
 useParticles()
+useSEO()
 
 const email = ref('')
 const subject = ref('')

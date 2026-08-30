@@ -50,7 +50,9 @@
               class="absolute inset-2 border-2 border-gold/30 rounded-full animate-[spin_15s_linear_infinite_reverse]"
             ></div>
             <div class="avatar-container absolute inset-4 rounded-full bg-black/80 flex items-center justify-center">
-              <span class="text-5xl"><img src="/founder.png" alt="Fondatrice" /></span>
+              <span class="text-5xl">
+                <img src="/founder.webp" alt="Fondatrice" width="160" height="160" loading="lazy" decoding="async" />
+              </span>
             </div>
           </div>
           <h3 class="text-white text-[1.5rem] md:text-[1.8rem] font-bold tracking-[2px] mb-2 uppercase text-center">
