@@ -89,6 +89,6 @@ Le VPS ne build rien : il tire les images prêtes. Traefik (déjà en place sur 
 
 **Prérequis VPS** (`/home/ubuntu/major-baseline/`) : un fichier `.env` (gabarit : [`.env.production.sample`](.env.production.sample), `chmod 600`), le réseau Docker externe `traefik`, et `docker login ghcr.io` (PAT `read:packages`).
 
-**Secrets GitHub requis** : `SSH_HOST`, `SSH_USER`, `SSH_KEY` (paire dédiée au déploiement) et les `VITE_FIREBASE_*` (config web Firebase, publique).
+**Secrets GitHub requis** : `SSH_HOST`, `SSH_USER`, `SSH_PORT`, `SSH_KEY` (paire dédiée au déploiement) et les `VITE_FIREBASE_*` (config web Firebase, publique).
 
 **Rollback** : sur le VPS, `IMAGE_TAG=sha-<ancien> docker compose --env-file .env -f docker-compose.prod.yml up -d`.
