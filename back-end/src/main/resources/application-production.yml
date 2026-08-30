@@ -21,13 +21,16 @@ logging:
     com.appdashboard: INFO
 
 custom:
-  api-url: ${API_URL_PRODUCTION}
-  client-url: ${CLIENT_URL_PRODUCTION}
+  api-url: ${API_URL_PROD}
+  client-url: ${CLIENT_URL_PROD}
+  contact-email: ${CONTACT_EMAIL_DESTINATION}
 
+# Identifiants stores optionnels : les services Store tournent en mock pour
+# l'instant, un défaut vide suffit à démarrer sans les vraies clés.
 stores:
   google-play:
-    service-account-json: ${GOOGLE_PLAY_SERVICE_ACCOUNT}
+    service-account-json: ${GOOGLE_PLAY_SERVICE_ACCOUNT:}
   apple:
-    key-id: ${APPLE_KEY_ID}
-    issuer-id: ${APPLE_ISSUER_ID}
-    private-key: ${APPLE_PRIVATE_KEY}
+    key-id: ${APPLE_KEY_ID:}
+    issuer-id: ${APPLE_ISSUER_ID:}
+    private-key: ${APPLE_PRIVATE_KEY:}

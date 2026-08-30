@@ -8,8 +8,8 @@
   --color-gold: #d4af37;
   --color-gold-soft: #f2c94c;
   --color-slate-custom: #94a3b8;
-  --font-family-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
+  --font-family-sans: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', sans-serif;
 
   --shadow-glow-teal: 0 0 15px color-mix(in srgb, var(--color-teal) 30%, transparent);
   --shadow-glow-teal-lg: 0 0 30px color-mix(in srgb, var(--color-teal) 40%, transparent);

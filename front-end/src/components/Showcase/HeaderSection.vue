@@ -7,7 +7,14 @@
         :style="isMenuOpen ? 'filter: grayscale(1) brightness(0.2); opacity: 0.5;' : ''"
         aria-label="Retour à l'accueil"
       >
-        <img src="/major-baseline-logo-dark.svg" alt="Major Baseline Logo" class="h-full w-auto object-contain" />
+        <img
+          src="/major-baseline-logo-dark.svg"
+          alt="Major Baseline Logo"
+          width="376"
+          height="84"
+          decoding="async"
+          class="h-full w-auto object-contain"
+        />
       </router-link>
 
       <!-- Bouton Burger (Mobile) -->

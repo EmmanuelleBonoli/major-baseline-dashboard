@@ -13,6 +13,8 @@
           v-if="application.images?.[0]"
           :src="application.images[0]"
           :alt="application.title"
+          loading="lazy"
+          decoding="async"
           class="card-image absolute inset-0 w-full h-full object-contain z-[1]"
         />
         <span v-else class="card-icon relative z-[2]">{{ application.icon }}</span>

@@ -13,13 +13,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useSEO } from '@/composables/useSEO'
 
 const route = useRoute()
 const policyContent = ref('')
 const loading = ref(true)
 const error = ref(false)
+
+// Titre dérivé des paramètres d'URL : plus explicite qu'un générique
+// « Document Légal » pour l'indexation et l'affichage en onglet.
+const seoTitle = computed(() => {
+  const project = String(route.params.projectId ?? '').trim()
+  const label = route.params.type === 'privacy' ? 'Politique de confidentialité' : 'Conditions générales de vente'
+  return project ? `${label} — ${project}` : 'Document légal'
+})
+
+useSEO({ title: seoTitle })
 
 const policies = import.meta.glob('../content/policies/*.html', { query: '?raw', import: 'default' })
 

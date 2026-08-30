@@ -6,14 +6,16 @@ export const alasso: ShowcaseApp = {
   icon: '🤝',
   tagline: "Site de partage d'activités au service des associations",
   status: 'Disponible',
+  order: 5,
   category: ['Plateforme Web', 'Associatif'],
   description: `
 Site de partage d'activités au service des associations,
 réalisé dans le cadre de la formation Wild Code School.
   `,
-  images: ['/images/alasso.png'],
+  images: ['/images/alasso.webp'],
   techStack: ['Angular', 'Typescript', 'Spring', 'Java', 'Hibernate', 'Docker', 'CI/CD'],
   links: {
+    live: 'https://a-l-asso.fr/',
     github: ['https://github.com/WildCodeSchool/a-lasso_frontend', 'https://github.com/WildCodeSchool/a-lasso_backend']
   }
 }
