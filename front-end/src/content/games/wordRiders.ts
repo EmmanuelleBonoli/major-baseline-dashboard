@@ -9,7 +9,7 @@ export const wordRiders: ShowcaseApp = {
   status: '4ème trimestre 2026',
   order: 1,
   description: `
-Word Riders est un jeu de puzzle de mots mobile. 
+Word Riders est un jeu de lettres sur mobile. 
 Les joueurs doivent former des mots en utilisant les lettres fournies 
 pour avancer sur la piste et faire la course jusqu'à la ligne d'arrivée !
   `,
