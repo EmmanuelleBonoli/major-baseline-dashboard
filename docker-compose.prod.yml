@@ -1,14 +1,4 @@
 # Compose de production autonome — Major Baseline.
-#
-# Utilisé par la CI (.github/workflows/deploy.yml). Sur le VPS :
-#   cd /home/ubuntu/major-baseline
-#   docker compose --env-file .env -f docker-compose.prod.yml pull
-#   docker compose --env-file .env -f docker-compose.prod.yml up -d --remove-orphans
-#
-# Aucun build ici : les images viennent de ghcr.io.
-# Prérequis VPS :
-#   - réseau Docker externe `traefik` (fourni par la stack Traefik existante)
-#   - un fichier .env à côté de ce fichier (gabarit : back-end/.env.production.sample)
 
 name: ${COMPOSE_PROJECT_NAME:-major-baseline}
 
