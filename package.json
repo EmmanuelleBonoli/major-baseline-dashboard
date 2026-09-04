@@ -6,8 +6,8 @@
   "scripts": {
     "prepare": "husky",
     "prettier": "npx prettier --write .",
-    "docker:dev": "docker compose --env-file ./back-end/.env -f docker-compose.yml -f docker-compose.development.yml up",
-    "docker:dev:down": "docker compose --env-file ./back-end/.env -f docker-compose.yml -f docker-compose.development.yml down"
+    "dev:back": "cd back-end && mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=development",
+    "dev:front": "cd front-end && npm run dev"
   },
   "devDependencies": {
     "husky": "^9.1.7",

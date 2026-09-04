@@ -13,6 +13,11 @@ spring:
       hibernate:
         format_sql: true
 
+  datasource:
+    hikari:
+      # Réessaie de se connecter à MySQL pendant 30s au démarrage
+      initialization-fail-timeout: 30000
+
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
