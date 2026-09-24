@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Déclaration d'Accessibilité - Word Riders</title>
+    <style>
+      :root {
+        --primary-color: #5d4037;
+        --secondary-color: #8d6e63;
+        --accent-color: #4caf50;
+        --bg-color: #faf8f5;
+        --text-color: #333333;
+      }
+
+      body {
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 40px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      h1 {
+        color: var(--primary-color);
+        text-align: center;
+        border-bottom: 2px solid var(--secondary-color);
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+      }
+
+      h2 {
+        color: var(--primary-color);
+        margin-top: 30px;
+        border-left: 4px solid var(--accent-color);
+        padding-left: 10px;
+      }
+
+      h3 {
+        color: var(--secondary-color);
+      }
+
+      p {
+        margin-bottom: 15px;
+      }
+
+      ul {
+        margin-bottom: 20px;
+      }
+
+      li {
+        margin-bottom: 8px;
+      }
+
+      .highlight {
+        background-color: #e8f5e9;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #4caf50;
+        margin: 20px 0;
+      }
+
+      .footer {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 0.9em;
+        color: #777;
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 20px;
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Déclaration d'Accessibilité</h1>
+
+      <p><strong>Dernière mise à jour :</strong> 21 Septembre 2026</p>
+
+      <div class="highlight">
+        <strong>En résumé :</strong> Word Riders suit une démarche d'accessibilité en <strong>best-effort</strong>, sans certification WCAG formelle,
+        sur trois axes retenus : vision, motricité et cognitif. Le tunnel d'achat (boutique et paiement intégré) bénéficie d'un traitement renforcé,
+        au titre d'une obligation légale réelle.
+      </div>
+
+      <p>
+        Cette déclaration décrit les efforts mis en œuvre par <strong>Word Riders</strong> (ci-après "le Jeu") pour rendre son interface utilisable
+        par le plus grand nombre, ainsi que les limites assumées de cette démarche.
+      </p>
+
+      <h2>1. Démarche générale</h2>
+      <p>
+        Le Jeu n'a fait l'objet d'aucun audit ou certification d'accessibilité formel (type WCAG 2.1 AA complet). Il s'agit d'une démarche
+        <strong>best-effort</strong>, proportionnée à la taille de l'équipe et à la nature du Jeu (un puzzle de lettres reposant sur un plateau
+        visuel), et concentrée sur trois axes :
+      </p>
+      <ul>
+        <li>
+          <strong>Vision</strong> : aucune information de jeu n'est portée par la seule couleur, et les textes et éléments d'interface visent un
+          contraste conforme au repère WCAG AA (4.5:1 texte normal, 3:1 éléments d'interface). Un réglage optionnel de taille de texte est disponible
+          dans les paramètres du Jeu.
+        </li>
+        <li>
+          <strong>Motricité</strong> : les zones tactiles (lettres, boutons) respectent une taille minimale de 44×44pt (iOS) / 48×48dp (Android). Un
+          multiplicateur de temps optionnel (x1.5, x2) permet de ralentir le chronomètre du mode course pour réduire la pression temporelle.
+        </li>
+        <li><strong>Cognitif</strong> : l'espacement et l'interlignage des textes ont été ajustés pour une lecture plus confortable.</li>
+      </ul>
+      <p>L'axe auditif est explicitement hors périmètre : le Jeu ne comporte aucun contenu vocal ni dialogue nécessitant une alternative sonore.</p>
+
+      <h2>2. Tunnel d'achat : conformité renforcée</h2>
+      <p>
+        Word Riders propose des achats intégrés (pièces, boosters, suppression de publicité). En tant que service de commerce électronique, ce tunnel
+        d'achat entre dans le champ d'application du
+        <strong>European Accessibility Act</strong> (EAA, en vigueur depuis le 28 juin 2025) et de la norme <strong>EN 301 549</strong> qu'il
+        référence.
+      </p>
+      <p>
+        À ce titre, la boutique et le parcours de paiement intégré bénéficient d'un traitement prioritaire et plus poussé que le reste du Jeu :
+        navigation et lecture au lecteur d'écran (VoiceOver / TalkBack) via des libellés et indications sémantiques dédiés, en visant les mêmes
+        repères de contraste WCAG AA.
+      </p>
+      <p>
+        Le reste du Jeu (plateau de lettres, course, objectifs) ne fait pas l'objet de cette même obligation légale et n'offre pas de support complet
+        au lecteur d'écran : un puzzle visuel de lettres est, par nature, difficilement navigable sans repère visuel.
+      </p>
+
+      <h2>3. Limites connues</h2>
+      <ul>
+        <li>Pas de support lecteur d'écran en dehors du tunnel d'achat.</li>
+        <li>Pas de police alternative dédiée aux troubles de lecture (type dyslexie).</li>
+        <li>Pas de mode de jeu simplifié réduisant la charge cognitive au-delà de la lisibilité des textes.</li>
+        <li>Pas d'audit ou de certification d'accessibilité par un tiers.</li>
+      </ul>
+
+      <h2>4. Signaler un problème d'accessibilité</h2>
+      <p>
+        Si vous rencontrez une difficulté d'accessibilité en utilisant Word Riders, ou si vous souhaitez nous faire part d'une suggestion, vous pouvez
+        nous contacter à l'adresse indiquée ci-dessous. Nous nous efforçons de répondre et d'améliorer le Jeu dans la mesure de nos moyens.
+      </p>
+
+      <div class="footer">
+        <p>&copy; 2026 Word Riders. Tous droits réservés.</p>
+        <p>Pour toute question ou signalement lié à l'accessibilité du Jeu : contact@major-baseline.fr</p>
+      </div>
+    </div>
+  </body>
+</html>
