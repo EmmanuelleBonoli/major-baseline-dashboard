@@ -24,9 +24,16 @@ const error = ref(false)
 
 // Titre dérivé des paramètres d'URL : plus explicite qu'un générique
 // « Document Légal » pour l'indexation et l'affichage en onglet.
+const policyLabels: Record<string, string> = {
+  privacy: 'Politique de confidentialité',
+  accessibility: "Déclaration d'accessibilité",
+  sales: 'Conditions générales de vente'
+}
+
 const seoTitle = computed(() => {
   const project = String(route.params.projectId ?? '').trim()
-  const label = route.params.type === 'privacy' ? 'Politique de confidentialité' : 'Conditions générales de vente'
+  const type = String(route.params.type ?? '')
+  const label = policyLabels[type] ?? policyLabels.sales
   return project ? `${label} — ${project}` : 'Document légal'
 })
 
@@ -34,10 +41,16 @@ useSEO({ title: seoTitle })
 
 const policies = import.meta.glob('../content/policies/*.html', { query: '?raw', import: 'default' })
 
+const policyFileSuffixes: Record<string, string> = {
+  privacy: 'privacy_policy',
+  accessibility: 'accessibility_statement',
+  sales: 'sales_policy'
+}
+
 onMounted(async () => {
   const { projectId, type } = route.params
 
-  const policyType = type === 'privacy' ? 'privacy_policy' : 'sales_policy'
+  const policyType = policyFileSuffixes[String(type ?? '')] ?? policyFileSuffixes.sales
   const fileName = `../content/policies/${projectId}_${policyType}.html`
 
   try {
