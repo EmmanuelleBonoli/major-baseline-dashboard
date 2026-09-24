@@ -17,7 +17,8 @@ pour avancer sur la piste et faire la course jusqu'à la ligne d'arrivée !
   techStack: ['Flutter', 'Dart', 'Flame', 'Firebase'],
   policies: {
     hasCGV: true,
-    hasPrivacyPolicy: true
+    hasPrivacyPolicy: true,
+    hasAccessibilityStatement: true
   },
   links: {
     github: ['https://github.com/EmmanuelleBonoli/WordRiders']

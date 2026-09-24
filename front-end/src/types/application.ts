@@ -13,6 +13,7 @@ export interface ShowcaseApp {
   policies?: {
     hasCGV?: boolean
     hasPrivacyPolicy?: boolean
+    hasAccessibilityStatement?: boolean
   }
   links?: {
     github?: string[]

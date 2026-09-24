@@ -121,7 +121,12 @@
       </div>
 
       <div
-        v-if="application.policies && (application.policies.hasPrivacyPolicy || application.policies.hasCGV)"
+        v-if="
+          application.policies &&
+          (application.policies.hasPrivacyPolicy ||
+            application.policies.hasCGV ||
+            application.policies.hasAccessibilityStatement)
+        "
         class="description-card w-full p-6 sm:p-8 md:p-10 bg-black/60 border-y sm:border-x border-teal/30 backdrop-blur-md mb-10 md:mb-16 relative"
       >
         <h2
@@ -146,6 +151,14 @@
             class="inline-flex items-center gap-3 px-6 py-3 border border-teal text-teal hover:bg-teal hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
           >
             <FileText :size="16" class="shrink-0" /> CGV / Conditions d'utilisation
+          </router-link>
+          <router-link
+            v-if="application.policies.hasAccessibilityStatement"
+            :to="`/policies/${application.id}/accessibility`"
+            target="_blank"
+            class="inline-flex items-center gap-3 px-6 py-3 border border-teal text-teal hover:bg-teal hover:text-black transition-all duration-300 font-bold uppercase tracking-widest text-sm"
+          >
+            <Accessibility :size="16" class="shrink-0" /> Déclaration d'Accessibilité
           </router-link>
         </div>
       </div>
@@ -207,7 +220,7 @@ import { computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { gamesMap } from '@/content/games/index'
 import { applicationsMap } from '@/content/applications/index'
-import { ShieldCheck, FileText, ExternalLink, Github } from 'lucide-vue-next'
+import { ShieldCheck, FileText, Accessibility, ExternalLink, Github } from 'lucide-vue-next'
 import { useParticles } from '@/composables/useParticles'
 import { useSEO, toAbsoluteUrl } from '@/composables/useSEO'
 import FooterSection from '@/components/Showcase/FooterSection.vue'
